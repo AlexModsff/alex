@@ -7,6 +7,9 @@ import { motion, AnimatePresence } from "motion/react";
 import { ShoppingCart, ShieldCheck, Store, ChevronRight, Star, Flame, Trophy, Target, Youtube, MessageSquare, ChevronLeft, ChevronDown, Clock, Zap, User, Lock, LogIn, UserPlus, LogOut } from "lucide-react";
 import React, { useState, ReactNode, useEffect, createContext, useContext } from "react";
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate, useLocation, Navigate } from "react-router-dom";
+import { auth, db } from "./firebase";
+import { onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
+import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
 
 // Auth Context
 interface AuthContextType {
@@ -20,34 +23,32 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<string | null>(localStorage.getItem("alex_mods_user"));
-  const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      if (firebaseUser) {
+        setUser(firebaseUser.displayName || firebaseUser.email?.split('@')[0] || "Usuario");
+      } else {
+        setUser(null);
+      }
+      setLoading(false);
+    });
+    return () => unsubscribe();
+  }, []);
 
   const login = async (username: string, password: string) => {
     setLoading(true);
     try {
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-      });
-      
-      const contentType = response.headers.get("content-type");
-      if (contentType && contentType.includes("application/json")) {
-        const data = await response.json();
-        if (!response.ok) {
-          throw new Error(data.error || "Error al iniciar sesión");
-        }
-        setUser(data.username);
-        localStorage.setItem("alex_mods_user", data.username);
-      } else {
-        const text = await response.text();
-        console.error("Non-JSON response:", text);
-        throw new Error("El servidor no respondió correctamente. Por favor, intenta de nuevo.");
-      }
+      const email = `${username.toLowerCase().trim()}@alexstore.local`;
+      await signInWithEmailAndPassword(auth, email, password);
     } catch (err: any) {
-      console.error("Login catch:", err);
-      throw err;
+      console.error("Login error:", err);
+      if (err.code === "auth/user-not-found" || err.code === "auth/wrong-password" || err.code === "auth/invalid-credential") {
+        throw new Error("Usuario o contraseña incorrectos");
+      }
+      throw new Error("Error al iniciar sesión. Intenta de nuevo.");
     } finally {
       setLoading(false);
     }
@@ -56,36 +57,44 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const register = async (username: string, password: string) => {
     setLoading(true);
     try {
-      const response = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-      });
+      const cleanUsername = username.toLowerCase().trim();
+      const email = `${cleanUsername}@alexstore.local`;
       
-      const contentType = response.headers.get("content-type");
-      if (contentType && contentType.includes("application/json")) {
-        const data = await response.json();
-        if (!response.ok) {
-          throw new Error(data.error || "Error al registrarse");
-        }
-        setUser(data.username);
-        localStorage.setItem("alex_mods_user", data.username);
-      } else {
-        const text = await response.text();
-        console.error("Non-JSON response:", text);
-        throw new Error("El servidor no respondió correctamente. Por favor, intenta de nuevo.");
+      // Check if username exists in Firestore (optional but good for uniqueness)
+      const userDoc = await getDoc(doc(db, "users", cleanUsername));
+      if (userDoc.exists()) {
+        throw new Error("El nombre de usuario ya existe");
       }
+
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      await updateProfile(userCredential.user, { displayName: username });
+      
+      // Store in Firestore for metadata
+      await setDoc(doc(db, "users", cleanUsername), {
+        uid: userCredential.user.uid,
+        username: username,
+        createdAt: serverTimestamp()
+      });
     } catch (err: any) {
-      console.error("Register catch:", err);
+      console.error("Register error:", err);
+      if (err.code === "auth/email-already-in-use") {
+        throw new Error("El nombre de usuario ya está registrado");
+      }
+      if (err.code === "auth/weak-password") {
+        throw new Error("La contraseña es muy débil (mínimo 6 caracteres)");
+      }
       throw err;
     } finally {
       setLoading(false);
     }
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem("alex_mods_user");
+  const logout = async () => {
+    try {
+      await signOut(auth);
+    } catch (err) {
+      console.error("Logout error:", err);
+    }
   };
 
   return (
@@ -1276,7 +1285,8 @@ function Redes() {
   );
 }
 
-export default function App() {
+function AppContent() {
+  const { loading } = useAuth();
   const [recentPurchase, setRecentPurchase] = useState<{ user: string; item: string } | null>(null);
 
   useEffect(() => {
@@ -1313,9 +1323,7 @@ export default function App() {
       "ShotVeinte", "BattleMaximo", "PlayTotal", "FinalListo", "NivelActivo", "RangoFirme", "ZonaAltaPro", "DropSeguro", "RushFuerte", "AimPerfecto"
     ];
     
-    // Filtrar productos: Pato Team Verde, Pato Team Azul, Drip, Fluorite y otros, menos diamantes
     const validProducts = PRODUCTS.filter(p => p.id !== 'diamonds-low-price').map(p => p.name);
-    
     const intervals = [10000, 5000, 15000];
     let currentIndex = 0;
     let timeoutId: NodeJS.Timeout;
@@ -1324,35 +1332,39 @@ export default function App() {
       const randomName = names[Math.floor(Math.random() * names.length)] + "***";
       const randomProduct = validProducts[Math.floor(Math.random() * validProducts.length)];
       setRecentPurchase({ user: randomName, item: randomProduct });
-      
-      // Ocultar después de 3 segundos para que no se solapen en el intervalo de 5s
       setTimeout(() => setRecentPurchase(null), 3000);
-
-      // Programar la siguiente notificación con el siguiente intervalo
       const nextInterval = intervals[currentIndex];
       currentIndex = (currentIndex + 1) % intervals.length;
       timeoutId = setTimeout(showNotification, nextInterval);
     };
 
-    // Iniciar el ciclo
     timeoutId = setTimeout(showNotification, 2000);
-
     return () => clearTimeout(timeoutId);
   }, []);
 
-  return (
-    <AuthProvider>
-      <Router>
-        <div className="min-h-screen bg-black font-sans text-white selection:bg-white selection:text-black">
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<Inicio />} />
-            <Route path="/productos" element={<ProtectedRoute><Productos /></ProtectedRoute>} />
-            <Route path="/redes" element={<ProtectedRoute><Redes /></ProtectedRoute>} />
-            <Route path="/auth" element={<AuthPage />} />
-          </Routes>
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <motion.div 
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+          className="w-12 h-12 border-4 border-white/20 border-t-white rounded-full"
+        />
+      </div>
+    );
+  }
 
-        {/* Live Activity Feed - Global */}
+  return (
+    <Router>
+      <div className="min-h-screen bg-black font-sans text-white selection:bg-white selection:text-black">
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Inicio />} />
+          <Route path="/productos" element={<ProtectedRoute><Productos /></ProtectedRoute>} />
+          <Route path="/redes" element={<ProtectedRoute><Redes /></ProtectedRoute>} />
+          <Route path="/auth" element={<AuthPage />} />
+        </Routes>
+
         <AnimatePresence>
           {recentPurchase && (
             <motion.div
@@ -1407,6 +1419,13 @@ export default function App() {
         </footer>
       </div>
     </Router>
+  );
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
     </AuthProvider>
   );
 }

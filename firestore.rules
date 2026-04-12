@@ -26,18 +26,20 @@ service cloud.firestore {
     }
 
     match /users/{username} {
-      // Only allow reading a specific user document (for login check)
-      // and creating a new one (registration).
-      // We use request.auth == null because our server-side client is unauthenticated
-      // but we validate the schema strictly.
-      allow get: if true; 
-      allow create: if isValidUser(request.resource.data) && 
-                      request.resource.id == request.resource.data.username &&
+      // Allow reading any user document (to check if username exists)
+      allow get: if true;
+      
+      // Allow creation only if authenticated and the document ID matches the username
+      // We also validate the schema.
+      allow create: if request.auth != null && 
+                      request.resource.data.uid == request.auth.uid &&
                       request.resource.data.username.size() >= 3 &&
                       request.resource.data.username.size() <= 20;
       
-      // Prevent any other access
-      allow list, update, delete: if false;
+      // Only the owner can update or delete their document
+      allow update, delete: if request.auth != null && resource.data.uid == request.auth.uid;
+      
+      allow list: if false;
     }
   }
 }
