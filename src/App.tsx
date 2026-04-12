@@ -79,6 +79,14 @@ const useAuth = () => {
   return context;
 };
 
+const ProtectedRoute = ({ children }: { children: ReactNode }) => {
+  const { user } = useAuth();
+  if (!user) {
+    return <Navigate to="/auth" replace />;
+  }
+  return <>{children}</>;
+};
+
 interface PriceOption {
   duration: string;
   price: number;
@@ -288,7 +296,9 @@ function Sparkles() {
 
   useEffect(() => {
     const colors = ["#60a5fa", "#7dd3fc", "#22d3ee", "#ffffff", "#93c5fd"];
-    const newParticles = Array.from({ length: 120 }).map((_, i) => ({
+    // Reduced particle count for mobile performance (from 120 to 40)
+    const count = window.innerWidth < 768 ? 30 : 60;
+    const newParticles = Array.from({ length: count }).map((_, i) => ({
       id: i,
       x: Math.random() * 100,
       y: 100,
@@ -372,18 +382,20 @@ function Sparkles() {
   );
 }
 
-function ProductCard({ product, index }: { product: Product; index: number; key?: string }) {
+// Memoized ProductCard for performance
+const ProductCard = React.memo(({ product, index }: { product: Product; index: number; key?: string }) => {
   const [selectedPriceId, setSelectedPriceId] = useState(
     product.prices.find(p => !p.isAgotado)?.id || product.prices[0].id
   );
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [isDiamondMenuOpen, setIsDiamondMenuOpen] = useState(false);
 
-  const nextImage = () => {
+  const nextImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setCurrentImageIndex((prev) => (prev + 1) % product.mediaUrls.length);
   };
 
-  const prevImage = () => {
+  const prevImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setCurrentImageIndex((prev) => (prev - 1 + product.mediaUrls.length) % product.mediaUrls.length);
   };
 
@@ -430,6 +442,7 @@ function ProductCard({ product, index }: { product: Product; index: number; key?
                 key={currentImageIndex}
                 src={currentMediaUrl} 
                 alt={product.name}
+                loading="lazy"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
@@ -570,7 +583,7 @@ function ProductCard({ product, index }: { product: Product; index: number; key?
       </div>
     </div>
   );
-}
+});
 
 function Navbar() {
   const location = useLocation();
@@ -749,33 +762,19 @@ function Inicio() {
       <header className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
         {/* Background with Parallax Effect */}
         <div className="absolute inset-0 z-0">
-          <motion.div
-            animate={{ 
-              scale: [1, 1.02, 1],
-            }}
-            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-            className="w-full h-full opacity-20 grayscale"
-          >
+          <div className="w-full h-full opacity-20 grayscale">
             <img 
               src="https://images.unsplash.com/photo-1614064641938-3bbee52942c7?auto=format&fit=crop&q=80&w=1920" 
               alt="Background" 
               className="w-full h-full object-cover"
               referrerPolicy="no-referrer"
+              loading="eager"
             />
-          </motion.div>
+          </div>
           <div className="absolute inset-0 bg-gradient-to-b from-black via-black/95 to-black" />
           
           {/* Moving Grid Background */}
           <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.01)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[size:80px_80px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_95%)]" />
-
-          {/* Subtle White Glows */}
-          <motion.div 
-            animate={{ 
-              opacity: [0.05, 0.1, 0.05]
-            }}
-            transition={{ duration: 10, repeat: Infinity }}
-            className="absolute top-1/4 left-1/4 w-[800px] h-[800px] bg-white/5 rounded-full blur-[200px]"
-          />
         </div>
 
         <Sparkles />
@@ -1326,8 +1325,8 @@ export default function App() {
           <Navbar />
           <Routes>
             <Route path="/" element={<Inicio />} />
-            <Route path="/productos" element={<Productos />} />
-            <Route path="/redes" element={<Redes />} />
+            <Route path="/productos" element={<ProtectedRoute><Productos /></ProtectedRoute>} />
+            <Route path="/redes" element={<ProtectedRoute><Redes /></ProtectedRoute>} />
             <Route path="/auth" element={<AuthPage />} />
           </Routes>
 
