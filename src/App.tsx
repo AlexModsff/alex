@@ -7,9 +7,6 @@ import { motion, AnimatePresence } from "motion/react";
 import { ShoppingCart, ShieldCheck, Store, ChevronRight, Star, Flame, Trophy, Target, Youtube, MessageSquare, ChevronLeft, ChevronDown, Clock, Zap, User, Lock, LogIn, UserPlus, LogOut } from "lucide-react";
 import React, { useState, ReactNode, useEffect, createContext, useContext } from "react";
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate, useLocation, Navigate } from "react-router-dom";
-import { db } from "./firebase";
-import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
-import bcrypt from "bcryptjs";
 
 // Auth Context
 interface AuthContextType {
@@ -29,17 +26,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = async (username: string, password: string) => {
     setLoading(true);
     try {
-      const userDoc = await getDoc(doc(db, "users", username));
-      if (!userDoc.exists()) {
-        throw new Error("Usuario no encontrado");
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || "Error al iniciar sesión");
       }
-      const userData = userDoc.data();
-      const isMatch = await bcrypt.compare(password, userData.passwordHash);
-      if (!isMatch) {
-        throw new Error("Contraseña incorrecta");
-      }
-      setUser(username);
-      localStorage.setItem("alex_mods_user", username);
+      setUser(data.username);
+      localStorage.setItem("alex_mods_user", data.username);
     } finally {
       setLoading(false);
     }
@@ -48,19 +45,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const register = async (username: string, password: string) => {
     setLoading(true);
     try {
-      const userDoc = await getDoc(doc(db, "users", username));
-      if (userDoc.exists()) {
-        throw new Error("El nombre de usuario ya existe");
-      }
-      const salt = await bcrypt.genSalt(10);
-      const passwordHash = await bcrypt.hash(password, salt);
-      await setDoc(doc(db, "users", username), {
-        username,
-        passwordHash,
-        createdAt: serverTimestamp(),
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
       });
-      setUser(username);
-      localStorage.setItem("alex_mods_user", username);
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || "Error al registrarse");
+      }
+      setUser(data.username);
+      localStorage.setItem("alex_mods_user", data.username);
     } finally {
       setLoading(false);
     }

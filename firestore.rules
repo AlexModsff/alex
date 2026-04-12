@@ -26,13 +26,18 @@ service cloud.firestore {
     }
 
     match /users/{username} {
-      // Anyone can check if a user exists or create a new one (registration)
-      // but we validate the schema.
-      allow get: if true;
-      allow create: if isValidUser(request.resource.data) && request.resource.id == request.resource.data.username;
+      // Only allow reading a specific user document (for login check)
+      // and creating a new one (registration).
+      // We use request.auth == null because our server-side client is unauthenticated
+      // but we validate the schema strictly.
+      allow get: if true; 
+      allow create: if isValidUser(request.resource.data) && 
+                      request.resource.id == request.resource.data.username &&
+                      request.resource.data.username.size() >= 3 &&
+                      request.resource.data.username.size() <= 20;
       
-      // Updates and deletes are not needed for this basic auth spec, but let's restrict them.
-      allow update, delete: if false;
+      // Prevent any other access
+      allow list, update, delete: if false;
     }
   }
 }
