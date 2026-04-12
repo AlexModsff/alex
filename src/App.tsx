@@ -31,12 +31,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       });
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.error || "Error al iniciar sesión");
+      
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.error || "Error al iniciar sesión");
+        }
+        setUser(data.username);
+        localStorage.setItem("alex_mods_user", data.username);
+      } else {
+        const text = await response.text();
+        console.error("Non-JSON response:", text);
+        throw new Error("El servidor no respondió correctamente. Por favor, intenta de nuevo.");
       }
-      setUser(data.username);
-      localStorage.setItem("alex_mods_user", data.username);
+    } catch (err: any) {
+      console.error("Login catch:", err);
+      throw err;
     } finally {
       setLoading(false);
     }
@@ -50,12 +61,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       });
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.error || "Error al registrarse");
+      
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.error || "Error al registrarse");
+        }
+        setUser(data.username);
+        localStorage.setItem("alex_mods_user", data.username);
+      } else {
+        const text = await response.text();
+        console.error("Non-JSON response:", text);
+        throw new Error("El servidor no respondió correctamente. Por favor, intenta de nuevo.");
       }
-      setUser(data.username);
-      localStorage.setItem("alex_mods_user", data.username);
+    } catch (err: any) {
+      console.error("Register catch:", err);
+      throw err;
     } finally {
       setLoading(false);
     }
