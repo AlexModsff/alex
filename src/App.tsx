@@ -12,6 +12,8 @@ interface PriceOption {
   duration: string;
   price: number;
   id: number;
+  isAgotado?: boolean;
+  purchaseUrl?: string;
 }
 
 interface Product {
@@ -36,9 +38,9 @@ const PRODUCTS: Product[] = [
       "https://cdn.phototourl.com/free/2026-04-06-148b3b16-37e7-4d72-be76-7d2d32f56b63.jpg"
     ],
     prices: [
-      { id: 1, duration: "3 Días", price: 3 },
-      { id: 2, duration: "7 Días", price: 9 },
-      { id: 3, duration: "30 Días", price: 15 },
+      { id: 1, duration: "3 Días", price: 3, isAgotado: true },
+      { id: 2, duration: "7 Días", price: 9, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%207%20dias%20en%20Pato%20Team%20Azul%20%F0%9F%94%B5" },
+      { id: 3, duration: "30 Días", price: 14, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2030%20dias%20en%20Pato%20Team%20Azul%20%F0%9F%94%B5" },
     ],
     features: ["Aimbot Avanzado", "ESP Customizable", "Seguridad Reforzada"],
     rating: 5.0,
@@ -54,9 +56,9 @@ const PRODUCTS: Product[] = [
       "https://cdn.phototourl.com/free/2026-04-06-39004ccb-4017-4ab3-949f-c4262944bf59.jpg"
     ],
     prices: [
-      { id: 1, duration: "3 Días", price: 3 },
-      { id: 2, duration: "7 Días", price: 9 },
-      { id: 3, duration: "30 Días", price: 15 },
+      { id: 1, duration: "3 Días", price: 3, isAgotado: true },
+      { id: 2, duration: "7 Días", price: 9, isAgotado: true },
+      { id: 3, duration: "30 Días", price: 14, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2030%20dias%20en%20Pato%20Team%20Verde%20%F0%9F%9F%A2" },
     ],
     features: ["Optimización Verde", "ESP Ultra-Rápido", "Bypass Indetectable"],
     rating: 5.0,
@@ -72,9 +74,9 @@ const PRODUCTS: Product[] = [
       "https://cdn.phototourl.com/member/2026-03-22-d125fab5-a77c-40d9-b4d5-3565853aadaa.webp"
     ],
     prices: [
-      { id: 1, duration: "1 Día", price: 3 },
-      { id: 2, duration: "7 Días", price: 8 },
-      { id: 3, duration: "30 Días", price: 15 },
+      { id: 1, duration: "1 Día", price: 3, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%201%20dia%20en%20Drip%20Client%20%F0%9F%9F%A3" },
+      { id: 2, duration: "7 Días", price: 8, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%207%20dias%20en%20Drip%20Client%20%F0%9F%9F%A3" },
+      { id: 3, duration: "30 Días", price: 15, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2030%20dias%20en%20Drip%20Client%20%F0%9F%9F%A3" },
     ],
     features: ["No requiere Root", "Optimización de FPS", "Invisible a Grabaciones"],
     rating: 4.8,
@@ -90,9 +92,9 @@ const PRODUCTS: Product[] = [
       "https://cdn.phototourl.com/member/2026-03-22-96db9420-7c33-4b78-b946-a212d07bc622.jpg"
     ],
     prices: [
-      { id: 1, duration: "1 Día", price: 2 },
-      { id: 2, duration: "10 Días", price: 7 },
-      { id: 3, duration: "30 Días", price: 11 },
+      { id: 1, duration: "1 Día", price: 2, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%201%20Dia%20en%20HG%20CHEATS%20%F0%9F%94%B5" },
+      { id: 2, duration: "10 Días", price: 7, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2010%20Dias%20en%20HG%20CHEATS%20%F0%9F%94%B5" },
+      { id: 3, duration: "30 Días", price: 12, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2030%20Dias%20en%20HG%20CHEATS%20%F0%9F%94%B5" },
     ],
     features: ["Magic Bullet", "Speed Hack Safe", "Auto Headshot"],
     rating: 5.0,
@@ -108,9 +110,9 @@ const PRODUCTS: Product[] = [
       "https://cdn.phototourl.com/free/2026-03-22-377e4dc7-0d9c-4830-ae84-65d069746d42.jpg"
     ],
     prices: [
-      { id: 1, duration: "1 Día", price: 2 },
-      { id: 2, duration: "7 Días", price: 6 },
-      { id: 3, duration: "30 Días", price: 16 },
+      { id: 1, duration: "1 Día", price: 2, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%201%20Dias%20en%20Cuban%20Mods%20%F0%9F%87%A8%F0%9F%87%BA" },
+      { id: 2, duration: "7 Días", price: 7, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%207%20Dias%20en%20Cuban%20Mods%20%F0%9F%87%A8%F0%9F%87%BA" },
+      { id: 3, duration: "30 Días", price: 12, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2030%20Dias%20en%20Cuban%20Mods%20%F0%9F%87%A8%F0%9F%87%BA" },
     ],
     features: ["Aimbot 100% Real", "ESP Name & Distance", "Bypass Anti-Ban"],
     rating: 4.9,
@@ -126,9 +128,9 @@ const PRODUCTS: Product[] = [
       "https://cdn.phototourl.com/member/2026-03-22-6472f28b-2a7c-4451-b00c-421ac27032cc.jpg"
     ],
     prices: [
-      { id: 1, duration: "1 Día", price: 7 },
-      { id: 2, duration: "7 Días", price: 22 },
-      { id: 3, duration: "30 Días", price: 39 },
+      { id: 1, duration: "1 Día", price: 5, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%201%20Dia%20en%20Fluorite%20iOS%20%F0%9F%9F%A3" },
+      { id: 2, duration: "7 Días", price: 15, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%207%20Dias%20en%20Fluorite%20iOS%20%F0%9F%9F%A3" },
+      { id: 3, duration: "30 Días", price: 25, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2030%20Dias%20en%20Fluorite%20iOS%20%F0%9F%9F%A3" },
     ],
     features: ["Aimbot todo rojo", "Antena", "Para cuentas principales"],
     rating: 5.0,
@@ -144,9 +146,9 @@ const PRODUCTS: Product[] = [
       "https://cdn.phototourl.com/member/2026-03-22-1a1d3664-575a-4a45-9983-d0bb2891ebf4.png"
     ],
     prices: [
-      { id: 1, duration: "1 Día", price: 2 },
-      { id: 2, duration: "7 Días", price: 7 },
-      { id: 3, duration: "30 Días", price: 12 },
+      { id: 1, duration: "1 Día", price: 3, isAgotado: true },
+      { id: 2, duration: "7 Días", price: 9, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%207%20Dias%20en%20BR%20MODS%20ROOT%20%F0%9F%94%B5" },
+      { id: 3, duration: "30 Días", price: 15, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2030%20Dias%20en%20BR%20MODS%20ROOT%20%F0%9F%94%B5" },
     ],
     features: ["Para usuarios ROOT", "Cuenta Principal", "Aimbot"],
     rating: 5.0,
@@ -162,9 +164,9 @@ const PRODUCTS: Product[] = [
       "https://cdn.phototourl.com/free/2026-04-06-dbbde1be-29aa-4995-8301-1a4f98da4074.png"
     ],
     prices: [
-      { id: 1, duration: "1 Día", price: 4 },
-      { id: 2, duration: "7 Días", price: 9 },
-      { id: 3, duration: "30 Días", price: 15 },
+      { id: 1, duration: "1 Día", price: 4, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%201%20Dia%20en%20Proxi%20iPhone%20%F0%9F%9F%A1" },
+      { id: 2, duration: "7 Días", price: 9, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%207%20Dias%20en%20Proxi%20iPhone%20%F0%9F%9F%A1" },
+      { id: 3, duration: "30 Días", price: 15, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2030%20Dias%20en%20Proxi%20iPhone%20%F0%9F%9F%A1" },
     ],
     features: ["Optimizado para iOS", "Seguridad Máxima", "Sin Lag"],
     rating: 5.0,
@@ -179,9 +181,7 @@ const PRODUCTS: Product[] = [
       "https://cdn.phototourl.com/free/2026-04-06-bb437144-e49b-4f83-a2da-10db1926009f.jpg"
     ],
     prices: [
-      { id: 1, duration: "1 Día", price: 5 },
-      { id: 2, duration: "7 Días", price: 9 },
-      { id: 3, duration: "30 Días", price: 18 },
+      { id: 1, duration: "", price: 0, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Cuenta%20de%20LDCloud%20%F0%9F%9F%A1" },
     ],
     features: ["Acceso Remoto", "Sin Lag", "Multi-dispositivo"],
     rating: 5.0,
@@ -302,7 +302,9 @@ function Sparkles() {
 }
 
 function ProductCard({ product, index }: { product: Product; index: number; key?: string }) {
-  const [selectedPriceId, setSelectedPriceId] = useState(product.prices[0].id);
+  const [selectedPriceId, setSelectedPriceId] = useState(
+    product.prices.find(p => !p.isAgotado)?.id || product.prices[0].id
+  );
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isDiamondMenuOpen, setIsDiamondMenuOpen] = useState(false);
 
@@ -442,34 +444,53 @@ function ProductCard({ product, index }: { product: Product; index: number; key?
             </div>
           ) : (
             <div className="space-y-4">
-              <div className="grid grid-cols-3 gap-2">
-                {product.prices.map((price) => {
-                  const isSelected = selectedPriceId === price.id;
-                  return (
-                    <button
-                      key={price.id}
-                      onClick={() => setSelectedPriceId(price.id)}
-                      className={`relative py-3 rounded-xl border transition-all duration-300 ${
-                        isSelected
-                          ? "border-white bg-white text-black shadow-[0_0_20px_rgba(255,255,255,0.2)]"
-                          : "border-white/5 bg-zinc-900/50 text-zinc-500 hover:border-white/20"
-                      }`}
-                    >
-                      <div className="text-[8px] font-black uppercase tracking-tighter mb-0.5">{price.duration}</div>
-                      <div className="text-sm font-black">${price.price}</div>
-                    </button>
-                  );
-                })}
-              </div>
+              {(product.prices.length > 1 || (product.prices[0] && product.prices[0].duration !== "")) && (
+                <div className="grid grid-cols-3 gap-2">
+                  {product.prices.map((price) => {
+                    const isSelected = selectedPriceId === price.id;
+                    const isAgotado = price.isAgotado;
+                    
+                    return (
+                      <button
+                        key={price.id}
+                        onClick={() => setSelectedPriceId(price.id)}
+                        className={`relative py-3 rounded-xl border transition-all duration-300 ${
+                          isAgotado
+                            ? isSelected
+                              ? "border-red-500 bg-red-500/20 text-red-500 shadow-[0_0_20px_rgba(239,68,68,0.3)]"
+                              : "border-red-500/30 bg-red-500/5 text-red-500/60 hover:border-red-500/50"
+                            : isSelected
+                            ? "border-white bg-white text-black shadow-[0_0_20px_rgba(255,255,255,0.2)]"
+                            : "border-white/5 bg-zinc-900/50 text-zinc-500 hover:border-white/20"
+                        }`}
+                      >
+                        <div className="text-[8px] font-black uppercase tracking-tighter mb-0.5">
+                          {price.duration} {isAgotado && "(Agotado)"}
+                        </div>
+                        <div className="text-sm font-black">${price.price}</div>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
               
               <a 
-                href="https://w.app/2nao9j"
-                target="_blank"
+                href={product.prices.find(p => p.id === selectedPriceId)?.isAgotado ? "#" : (product.prices.find(p => p.id === selectedPriceId)?.purchaseUrl || "https://w.app/2nao9j")}
+                target={product.prices.find(p => p.id === selectedPriceId)?.isAgotado ? "_self" : "_blank"}
                 rel="noopener noreferrer"
-                className={`w-full h-14 bg-gradient-to-r ${product.color} text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-3 hover:brightness-110 transition-all active:scale-95 shadow-xl group/btn`}
+                onClick={(e) => {
+                  if (product.prices.find(p => p.id === selectedPriceId)?.isAgotado) {
+                    e.preventDefault();
+                  }
+                }}
+                className={`w-full h-14 bg-gradient-to-r ${product.color} text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-3 hover:brightness-110 transition-all active:scale-95 shadow-xl group/btn ${
+                  product.prices.find(p => p.id === selectedPriceId)?.isAgotado ? "opacity-50 cursor-not-allowed grayscale" : ""
+                }`}
               >
                 <ShoppingCart className="w-4 h-4" />
-                Comprar {product.prices.find(p => p.id === selectedPriceId)?.duration}
+                {product.prices.find(p => p.id === selectedPriceId)?.isAgotado 
+                  ? "NO DISPONIBLE" 
+                  : `Comprar ${product.prices.find(p => p.id === selectedPriceId)?.duration || ""}`.trim()}
                 <ChevronRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
               </a>
             </div>
