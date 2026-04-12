@@ -18,13 +18,15 @@ interface AuthContextType {
   register: (username: string, password: string) => Promise<void>;
   logout: () => void;
   loading: boolean;
+  isInitialCheck: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [isInitialCheck, setIsInitialCheck] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
@@ -33,7 +35,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       } else {
         setUser(null);
       }
-      setLoading(false);
+      setIsInitialCheck(false);
     });
     return () => unsubscribe();
   }, []);
@@ -41,12 +43,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = async (username: string, password: string) => {
     setLoading(true);
     try {
-      const email = `${username.toLowerCase().trim()}@alexstore.local`;
-      await signInWithEmailAndPassword(auth, email, password);
+      const email = `${username.toLowerCase().trim()}@alexmods.com`;
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const firebaseUser = userCredential.user;
+      setUser(firebaseUser.displayName || firebaseUser.email?.split('@')[0] || "Usuario");
     } catch (err: any) {
       console.error("Login error:", err);
-      if (err.code === "auth/user-not-found" || err.code === "auth/wrong-password" || err.code === "auth/invalid-credential") {
+      if (err.code === "auth/user-not-found" || err.code === "auth/wrong-password" || err.code === "auth/invalid-credential" || err.code === "auth/invalid-email") {
         throw new Error("Usuario o contraseña incorrectos");
+      }
+      if (err.code === "auth/network-request-failed") {
+        throw new Error("Error de red. Verifica tu conexión a internet.");
       }
       throw new Error("Error al iniciar sesión. Intenta de nuevo.");
     } finally {
@@ -58,9 +65,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setLoading(true);
     try {
       const cleanUsername = username.toLowerCase().trim();
-      const email = `${cleanUsername}@alexstore.local`;
+      const email = `${cleanUsername}@alexmods.com`;
       
-      // Check if username exists in Firestore (optional but good for uniqueness)
+      // Check if username exists in Firestore
       const userDoc = await getDoc(doc(db, "users", cleanUsername));
       if (userDoc.exists()) {
         throw new Error("El nombre de usuario ya existe");
@@ -69,12 +76,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(userCredential.user, { displayName: username });
       
-      // Store in Firestore for metadata
       await setDoc(doc(db, "users", cleanUsername), {
         uid: userCredential.user.uid,
         username: username,
         createdAt: serverTimestamp()
       });
+
+      setUser(username);
     } catch (err: any) {
       console.error("Register error:", err);
       if (err.code === "auth/email-already-in-use") {
@@ -83,7 +91,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (err.code === "auth/weak-password") {
         throw new Error("La contraseña es muy débil (mínimo 6 caracteres)");
       }
-      throw err;
+      if (err.code === "auth/invalid-email") {
+        throw new Error("Nombre de usuario no válido");
+      }
+      if (err.code === "auth/operation-not-allowed") {
+        throw new Error("El registro no está habilitado en Firebase. Contacta al administrador.");
+      }
+      throw new Error("Error al crear la cuenta. Intenta de nuevo.");
     } finally {
       setLoading(false);
     }
@@ -98,7 +112,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, register, logout, loading, isInitialCheck }}>
       {children}
     </AuthContext.Provider>
   );
@@ -679,29 +693,69 @@ function AuthPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
   const { login, register, loading, user } = useAuth();
   const navigate = useNavigate();
 
-  if (user) return <Navigate to="/" />;
+  if (user && !success) return <Navigate to="/" replace />;
+
+  useEffect(() => {
+    if (user) {
+      const timer = setTimeout(() => navigate("/"), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [user, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setSuccess(false);
+    
     if (!username || !password) {
       setError("Todos los campos son obligatorios");
       return;
     }
+    
+    if (username.length < 3) {
+      setError("El usuario debe tener al menos 3 caracteres");
+      return;
+    }
+
+    if (password.length < 6) {
+      setError("La contraseña debe tener al menos 6 caracteres");
+      return;
+    }
+
     try {
       if (isLogin) {
         await login(username, password);
       } else {
         await register(username, password);
       }
-      navigate("/");
+      setSuccess(true);
+      // The useEffect will handle navigation
     } catch (err: any) {
-      setError(err.message || "Ocurrió un error");
+      setError(err.message || "Ocurrió un error inesperado");
     }
   };
+
+  if (user && success) {
+    return (
+      <div className="min-h-[80vh] flex flex-col items-center justify-center px-6">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="text-center space-y-6"
+        >
+          <div className="w-20 h-20 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto border border-emerald-500/30">
+            <ShieldCheck className="w-10 h-10 text-emerald-400" />
+          </div>
+          <h2 className="text-4xl font-black uppercase italic tracking-tighter">¡Acceso Concedido!</h2>
+          <p className="text-zinc-500 text-[10px] font-bold uppercase tracking-widest">Redirigiendo al centro de mando...</p>
+        </motion.div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center px-6 py-20">
@@ -1286,7 +1340,7 @@ function Redes() {
 }
 
 function AppContent() {
-  const { loading } = useAuth();
+  const { isInitialCheck } = useAuth();
   const [recentPurchase, setRecentPurchase] = useState<{ user: string; item: string } | null>(null);
 
   useEffect(() => {
@@ -1342,7 +1396,7 @@ function AppContent() {
     return () => clearTimeout(timeoutId);
   }, []);
 
-  if (loading) {
+  if (isInitialCheck) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
         <motion.div 
