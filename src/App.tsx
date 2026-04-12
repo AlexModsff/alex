@@ -4,9 +4,85 @@
  */
 
 import { motion, AnimatePresence } from "motion/react";
-import { ShoppingCart, ShieldCheck, Store, ChevronRight, Star, Flame, Trophy, Target, Youtube, MessageSquare, ChevronLeft, ChevronDown, Clock, Zap } from "lucide-react";
-import { useState, ReactNode, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
+import { ShoppingCart, ShieldCheck, Store, ChevronRight, Star, Flame, Trophy, Target, Youtube, MessageSquare, ChevronLeft, ChevronDown, Clock, Zap, User, Lock, LogIn, UserPlus, LogOut } from "lucide-react";
+import React, { useState, ReactNode, useEffect, createContext, useContext } from "react";
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate, useLocation, Navigate } from "react-router-dom";
+import { db } from "./firebase";
+import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
+import bcrypt from "bcryptjs";
+
+// Auth Context
+interface AuthContextType {
+  user: string | null;
+  login: (username: string, password: string) => Promise<void>;
+  register: (username: string, password: string) => Promise<void>;
+  logout: () => void;
+  loading: boolean;
+}
+
+const AuthContext = createContext<AuthContextType | null>(null);
+
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [user, setUser] = useState<string | null>(localStorage.getItem("alex_mods_user"));
+  const [loading, setLoading] = useState(false);
+
+  const login = async (username: string, password: string) => {
+    setLoading(true);
+    try {
+      const userDoc = await getDoc(doc(db, "users", username));
+      if (!userDoc.exists()) {
+        throw new Error("Usuario no encontrado");
+      }
+      const userData = userDoc.data();
+      const isMatch = await bcrypt.compare(password, userData.passwordHash);
+      if (!isMatch) {
+        throw new Error("Contraseña incorrecta");
+      }
+      setUser(username);
+      localStorage.setItem("alex_mods_user", username);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const register = async (username: string, password: string) => {
+    setLoading(true);
+    try {
+      const userDoc = await getDoc(doc(db, "users", username));
+      if (userDoc.exists()) {
+        throw new Error("El nombre de usuario ya existe");
+      }
+      const salt = await bcrypt.genSalt(10);
+      const passwordHash = await bcrypt.hash(password, salt);
+      await setDoc(doc(db, "users", username), {
+        username,
+        passwordHash,
+        createdAt: serverTimestamp(),
+      });
+      setUser(username);
+      localStorage.setItem("alex_mods_user", username);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const logout = () => {
+    setUser(null);
+    localStorage.removeItem("alex_mods_user");
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, login, register, logout, loading }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) throw new Error("useAuth must be used within AuthProvider");
+  return context;
+};
 
 interface PriceOption {
   duration: string;
@@ -503,23 +579,52 @@ function ProductCard({ product, index }: { product: Product; index: number; key?
 
 function Navbar() {
   const location = useLocation();
+  const { user, logout } = useAuth();
   const isActive = (path: string) => location.pathname === path;
 
   return (
     <nav className="sticky top-0 z-50 bg-black/80 backdrop-blur-xl border-b border-zinc-800">
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex justify-between h-20 items-center">
-          <Link to="/" className="flex items-center gap-3">
-            <motion.span 
-              animate={{ y: [0, -2, 0] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-              className="text-2xl font-black tracking-tighter text-white uppercase italic"
-            >
-              ALEX STORE
-            </motion.span>
-          </Link>
+            <Link to="/" className="flex items-center gap-2">
+              <motion.span 
+                animate={{ y: [0, -2, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                className="text-2xl font-black tracking-tighter text-white uppercase italic"
+              >
+                ALEX STORE
+              </motion.span>
+              <motion.div
+                animate={{ 
+                  x: [0, 8, 0],
+                  rotate: [0, -5, 0]
+                }}
+                transition={{ 
+                  duration: 2, 
+                  repeat: Infinity, 
+                  ease: "easeInOut" 
+                }}
+                className="text-white"
+              >
+                <ShoppingCart className="w-6 h-6" />
+              </motion.div>
+            </Link>
           
-          <div className="flex items-center gap-6 md:gap-10 text-[10px] md:text-[11px] font-black uppercase tracking-widest">
+          <div className="flex items-center gap-4 md:gap-8 text-[10px] md:text-[11px] font-black uppercase tracking-widest">
+            {user ? (
+              <div className="flex items-center gap-4">
+                <span className="text-sky-400 hidden sm:inline">{user}</span>
+                <button onClick={logout} className="text-zinc-400 hover:text-white transition-colors flex items-center gap-2">
+                  <LogOut className="w-3 h-3" />
+                  Salir
+                </button>
+              </div>
+            ) : (
+              <Link to="/auth" className={`${isActive('/auth') ? 'text-white' : 'text-zinc-400'} hover:text-white transition-colors flex items-center gap-2`}>
+                <LogIn className="w-3 h-3" />
+                Iniciar Sesión
+              </Link>
+            )}
             <Link to="/" className={`${isActive('/') ? 'text-white' : 'text-zinc-400'} hover:text-white transition-colors`}>Inicio</Link>
             <Link to="/productos" className={`${isActive('/productos') ? 'text-white' : 'text-zinc-400'} hover:text-white transition-colors`}>Productos</Link>
             <Link to="/redes" className={`${isActive('/redes') ? 'text-white' : 'text-zinc-400'} hover:text-white transition-colors`}>Redes</Link>
@@ -530,8 +635,118 @@ function Navbar() {
   );
 }
 
+function AuthPage() {
+  const [isLogin, setIsLogin] = useState(true);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const { login, register, loading, user } = useAuth();
+  const navigate = useNavigate();
+
+  if (user) return <Navigate to="/" />;
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    if (!username || !password) {
+      setError("Todos los campos son obligatorios");
+      return;
+    }
+    try {
+      if (isLogin) {
+        await login(username, password);
+      } else {
+        await register(username, password);
+      }
+      navigate("/");
+    } catch (err: any) {
+      setError(err.message || "Ocurrió un error");
+    }
+  };
+
+  return (
+    <div className="min-h-[80vh] flex items-center justify-center px-6 py-20">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="w-full max-w-md bg-zinc-950 border border-white/5 rounded-[40px] p-10 shadow-2xl relative overflow-hidden"
+      >
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-sky-500 via-purple-500 to-pink-500" />
+        
+        <div className="text-center mb-10">
+          <h2 className="text-4xl font-black tracking-tighter uppercase italic mb-2">
+            {isLogin ? "Bienvenido" : "Únete a la Élite"}
+          </h2>
+          <p className="text-zinc-500 text-[10px] font-bold uppercase tracking-widest">
+            {isLogin ? "Ingresa tus credenciales" : "Crea tu cuenta oficial"}
+          </p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 ml-4">Usuario</label>
+            <div className="relative">
+              <User className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+              <input 
+                type="text" 
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="w-full h-14 bg-zinc-900/50 border border-white/5 rounded-2xl pl-14 pr-6 text-sm font-bold focus:border-sky-500/50 focus:outline-none transition-all"
+                placeholder="Tu nombre de usuario"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 ml-4">Contraseña</label>
+            <div className="relative">
+              <Lock className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+              <input 
+                type="password" 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full h-14 bg-zinc-900/50 border border-white/5 rounded-2xl pl-14 pr-6 text-sm font-bold focus:border-sky-500/50 focus:outline-none transition-all"
+                placeholder="••••••••"
+              />
+            </div>
+          </div>
+
+          {error && (
+            <motion.p 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-red-500 text-[10px] font-bold uppercase tracking-widest text-center"
+            >
+              {error}
+            </motion.p>
+          )}
+
+          <button 
+            type="submit"
+            disabled={loading}
+            className="w-full h-14 bg-white text-black rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] hover:scale-[1.02] active:scale-95 transition-all shadow-xl flex items-center justify-center gap-3 disabled:opacity-50"
+          >
+            {loading ? "Procesando..." : (isLogin ? "Iniciar Sesión" : "Crear Cuenta")}
+            <ChevronRight className="w-4 h-4" />
+          </button>
+        </form>
+
+        <div className="mt-8 text-center">
+          <button 
+            onClick={() => setIsLogin(!isLogin)}
+            className="text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-white transition-colors"
+          >
+            {isLogin ? "¿No tienes cuenta? Regístrate" : "¿Ya tienes cuenta? Inicia Sesión"}
+          </button>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
 function Inicio() {
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   return (
     <div className="flex flex-col bg-black">
@@ -608,6 +823,21 @@ function Inicio() {
             </motion.div>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+              {!user && (
+                <motion.button 
+                  onClick={() => navigate('/auth')}
+                  whileHover={{ scale: 1.05, boxShadow: "0 0 40px rgba(56,189,248,0.4)" }}
+                  whileTap={{ scale: 0.95 }}
+                  className="group relative w-full sm:w-64 h-16 overflow-hidden rounded-2xl transition-all"
+                >
+                  <div className="absolute inset-0 bg-sky-600 group-hover:bg-sky-500 transition-colors" />
+                  <div className="relative w-full h-full flex items-center justify-center gap-4 text-white font-black text-[10px] uppercase tracking-[0.3em]">
+                    <LogIn className="w-4 h-4" />
+                    Iniciar Sesión
+                    <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-2" />
+                  </div>
+                </motion.button>
+              )}
               <motion.button 
                 onClick={() => navigate('/productos')}
                 whileHover={{ scale: 1.05, boxShadow: "0 0 40px rgba(168,85,247,0.4)" }}
@@ -1035,9 +1265,36 @@ export default function App() {
 
   useEffect(() => {
     const names = [
-      "Carlos", "Juan", "Diego", "Andrés", "Luis", "Miguel", "Javier", "Fernando", "Ricardo", "Gabriel",
-      "Santi", "Mateo", "Kevin", "Alex", "Nico", "Dani", "Lucas", "Hugo", "Enzo", "Leo",
-      "GamerPro", "EliteSniper", "ShadowPlayer", "GhostMod", "SniperElite", "ProGamer", "MasterFF", "UltraPlayer"
+      "Alex", "Daniel", "Mateo", "Luis", "Carlos", "Andrés", "Diego", "Javier", "Sergio", "Marcos",
+      "Iván", "Pablo", "Nicolás", "Gabriel", "Fernando", "Ricardo", "Tomás", "Bruno", "Hugo", "Martín",
+      "Sofía", "Valeria", "Camila", "Daniela", "Mariana", "Paula", "Lucía", "Elena", "Carla", "Andrea",
+      "Natalia", "Julieta", "Fernanda", "Gabriela", "Renata", "Isabel", "Alicia", "Rosa", "Laura", "Teresa",
+      "AlexPro", "DanielFire", "MateoPlay", "LuisGamer", "CarlosTop", "DiegoPro", "JavierPlay", "SergioFire", "MarcosElite", "IvánPro",
+      "SofíaPlay", "ValeriaPro", "CamilaFire", "DanielaTop", "MarianaGame", "PaulaElite", "LucíaPlay", "ElenaPro", "CarlaGame", "AndreaTop",
+      "Shadow", "Ghost", "Sniper", "Hunter", "Legend", "Nitro", "Blaze", "Storm", "Alpha", "Delta",
+      "Viper", "Falcon", "Cobra", "Titan", "Inferno", "Eclipse", "Phantom", "Orion", "Draco", "Nova",
+      "AlexShadow", "DanielGhost", "MateoHunter", "LuisLegend", "CarlosStorm", "DiegoFalcon", "JavierNova", "SergioBlaze", "MarcosTitan", "IvánPhantom",
+      "SofíaNova", "ValeriaStorm", "CamilaBlaze", "DanielaShadow", "MarianaGhost", "PaulaFalcon", "LucíaTitan", "ElenaNova", "CarlaStorm", "AndreaBlaze",
+      "ProLag", "LagZero", "AimPro", "AimMaster", "Headshot", "QuickShot", "FastAim", "SilentShot", "ClutchPlay", "OneTap",
+      "NoScope", "FullDamage", "DropKill", "RushPro", "ZonePlayer", "FinalCircle", "SafeZone", "LootMaster", "BattleReady", "FireDrop",
+      "LunaAzul", "SolRojo", "NubeGris", "FuegoFrío", "RayoNocturno", "VientoLibre", "MarOscuro", "CieloRojo", "LuzNegra", "ArenaFina",
+      "TruenoSuave", "EcoSilente", "SombraAlta", "CaminoFirme", "BrisaFuerte", "NieblaDensa", "PicoAlto", "ValleOscuro", "FuegoLento", "Destello",
+      "AlexPlay", "DanielZone", "MateoRush", "LuisDrop", "CarlosAim", "DiegoShot", "JavierClutch", "SergioFire", "MarcosBattle", "IvánReady",
+      "SofíaPlay", "ValeriaRush", "CamilaDrop", "DanielaAim", "MarianaShot", "PaulaZone", "LucíaBattle", "ElenaReady", "CarlaRush", "AndreaDrop",
+      "NeoPlayer", "PixelHero", "CodeRunner", "GameShift", "PlayCore", "ByteMaster", "DataRush", "CyberPlay", "LogicFire", "FrameShot",
+      "Leo", "Emiliano", "Gael", "Alan", "Kevin", "Bryan", "Oscar", "Raúl", "Esteban", "César",
+      "Mía", "Zoe", "Emma", "Abril", "Noa", "Sara", "Vega", "Iris", "Lía", "Alba",
+      "LeoStorm", "EmilianoFire", "GaelRush", "AlanDrop", "KevinAim", "BryanShot", "OscarZone", "RaúlPlay", "EstebanClutch", "CésarBattle",
+      "MíaNova", "ZoeStorm", "EmmaFire", "AbrilRush", "NoaDrop", "SaraAim", "VegaShot", "IrisZone", "LíaPlay", "AlbaBattle",
+      "PuntoFinal", "ZonaAlta", "MiraFija", "PulsoFirme", "LíneaFinal", "JuegoLimpio", "TiroClaro", "VistaRápida", "PasoFirme", "GolpeFinal",
+      "RutaLibre", "MetaClara", "JuegoActivo", "AcciónTotal", "CampoAbierto", "ZonaMedia", "RondaFinal", "ÚltimoNivel", "ControlTotal",
+      "BlueFire", "RedStorm", "DarkWave", "LightShot", "GoldPlayer", "SilverAim", "BronzeRush", "IronZone", "SteelDrop", "CrystalPlay",
+      "NightRun", "DayShot", "SkyRush", "GroundPlay", "StarAim", "MoonDrop", "SunFire", "CloudZone", "WindShot", "RainPlay",
+      "ProNivel", "GamerActivo", "JuegoPro", "NivelMax", "TopJugador", "MejorPlay", "FullNivel", "AltoRango", "MetaPro", "JuegoElite",
+      "ZonaPro", "DropElite", "RushMax", "AimTop", "ShotPro", "BattleMax", "PlayElite", "FinalPro", "NivelElite", "RangoTop",
+      "Usuario01", "PlayerUno", "GamerDos", "NivelTres", "ProCuatro", "EliteCinco", "ZonaSeis", "DropSiete", "RushOcho", "AimNueve",
+      "ShotDiez", "BattleOnce", "PlayDoce", "FinalTrece", "NivelCatorce", "RangoQuince", "ZonaDieciseis", "DropDiecisiete", "RushDieciocho", "AimDiecinueve",
+      "ShotVeinte", "BattleMaximo", "PlayTotal", "FinalListo", "NivelActivo", "RangoFirme", "ZonaAltaPro", "DropSeguro", "RushFuerte", "AimPerfecto"
     ];
     
     // Filtrar productos: Pato Team Verde, Pato Team Azul, Drip, Fluorite y otros, menos diamantes
@@ -1068,14 +1325,16 @@ export default function App() {
   }, []);
 
   return (
-    <Router>
-      <div className="min-h-screen bg-black font-sans text-white selection:bg-white selection:text-black">
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Inicio />} />
-          <Route path="/productos" element={<Productos />} />
-          <Route path="/redes" element={<Redes />} />
-        </Routes>
+    <AuthProvider>
+      <Router>
+        <div className="min-h-screen bg-black font-sans text-white selection:bg-white selection:text-black">
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Inicio />} />
+            <Route path="/productos" element={<Productos />} />
+            <Route path="/redes" element={<Redes />} />
+            <Route path="/auth" element={<AuthPage />} />
+          </Routes>
 
         {/* Live Activity Feed - Global */}
         <AnimatePresence>
@@ -1101,13 +1360,27 @@ export default function App() {
 
         <footer className="bg-black border-t border-zinc-900 py-12">
           <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               <motion.span
                 animate={{ y: [0, -1, 0] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
               >
                 ALEX STORE © 2026
               </motion.span>
+              <motion.div
+                animate={{ 
+                  x: [0, 5, 0],
+                  rotate: [0, -3, 0]
+                }}
+                transition={{ 
+                  duration: 2, 
+                  repeat: Infinity, 
+                  ease: "easeInOut" 
+                }}
+                className="text-zinc-600"
+              >
+                <ShoppingCart className="w-4 h-4" />
+              </motion.div>
             </div>
             <div className="flex gap-8">
               <a href="#" className="hover:text-white transition-colors">Términos</a>
@@ -1118,5 +1391,6 @@ export default function App() {
         </footer>
       </div>
     </Router>
+    </AuthProvider>
   );
 }

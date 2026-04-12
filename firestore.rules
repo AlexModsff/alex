@@ -1,0 +1,38 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: users
+    // Document ID: {username}
+    // Fields:
+    //   - username: string (required) - Unique username
+    //   - passwordHash: string (required) - Hashed password
+    //   - createdAt: timestamp (required) - Creation time
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    
+    function isValidUser(data) {
+      return data.keys().hasAll(['username', 'passwordHash', 'createdAt']) &&
+             data.username is string && data.username.size() >= 3 && data.username.size() <= 20 &&
+             data.passwordHash is string && data.passwordHash.size() > 0 &&
+             data.createdAt is timestamp;
+    }
+
+    match /users/{username} {
+      // Anyone can check if a user exists or create a new one (registration)
+      // but we validate the schema.
+      allow get: if true;
+      allow create: if isValidUser(request.resource.data) && request.resource.id == request.resource.data.username;
+      
+      // Updates and deletes are not needed for this basic auth spec, but let's restrict them.
+      allow update, delete: if false;
+    }
+  }
+}
