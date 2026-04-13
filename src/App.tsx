@@ -82,6 +82,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         createdAt: serverTimestamp()
       });
 
+      // Force state update immediately
       setUser(username);
     } catch (err: any) {
       console.error("Register error:", err);
@@ -695,17 +696,15 @@ function AuthPage() {
   const [error, setError] = useState("");
   const [showFixGuide, setShowFixGuide] = useState(false);
   const [success, setSuccess] = useState(false);
-  const { login, register, loading, user } = useAuth();
+  const { login, register, loading, user, isInitialCheck } = useAuth();
   const navigate = useNavigate();
 
-  if (user && !success) return <Navigate to="/" replace />;
-
+  // Redirect if already logged in
   useEffect(() => {
-    if (user) {
-      const timer = setTimeout(() => navigate("/"), 1000);
-      return () => clearTimeout(timer);
+    if (!isInitialCheck && user) {
+      navigate("/", { replace: true });
     }
-  }, [user, navigate]);
+  }, [user, isInitialCheck, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
