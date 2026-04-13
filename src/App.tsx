@@ -16,7 +16,6 @@ interface AuthContextType {
   user: string | null;
   login: (username: string, password: string) => Promise<void>;
   register: (username: string, password: string) => Promise<void>;
-  loginWithGoogle: () => Promise<void>;
   logout: () => void;
   loading: boolean;
   isInitialCheck: boolean;
@@ -104,41 +103,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const loginWithGoogle = async () => {
-    setLoading(true);
-    try {
-      const provider = new GoogleAuthProvider();
-      const result = await signInWithPopup(auth, provider);
-      const firebaseUser = result.user;
-      
-      // Check if user exists in Firestore, if not create
-      const cleanUsername = firebaseUser.email?.split('@')[0] || "user_" + firebaseUser.uid.slice(0, 5);
-      const userDoc = await getDoc(doc(db, "users", cleanUsername));
-      
-      if (!userDoc.exists()) {
-        await setDoc(doc(db, "users", cleanUsername), {
-          uid: firebaseUser.uid,
-          username: firebaseUser.displayName || cleanUsername,
-          email: firebaseUser.email,
-          createdAt: serverTimestamp()
-        });
-      }
-      
-      setUser(firebaseUser.displayName || cleanUsername);
-    } catch (err: any) {
-      console.error("Google Login error:", err);
-      if (err.code === "auth/popup-blocked") {
-        throw new Error("El navegador bloqueó la ventana emergente. Por favor, permite las ventanas emergentes.");
-      }
-      if (err.code === "auth/operation-not-allowed") {
-        throw new Error("El inicio de sesión con Google no está habilitado en Firebase. Actívalo en la consola.");
-      }
-      throw new Error("Error al iniciar sesión con Google.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const logout = async () => {
     try {
       await signOut(auth);
@@ -148,7 +112,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, register, loginWithGoogle, logout, loading, isInitialCheck }}>
+    <AuthContext.Provider value={{ user, login, register, logout, loading, isInitialCheck }}>
       {children}
     </AuthContext.Provider>
   );
@@ -731,7 +695,7 @@ function AuthPage() {
   const [error, setError] = useState("");
   const [showFixGuide, setShowFixGuide] = useState(false);
   const [success, setSuccess] = useState(false);
-  const { login, register, loginWithGoogle, loading, user } = useAuth();
+  const { login, register, loading, user } = useAuth();
   const navigate = useNavigate();
 
   if (user && !success) return <Navigate to="/" replace />;
@@ -772,20 +736,6 @@ function AuthPage() {
       setSuccess(true);
     } catch (err: any) {
       setError(err.message || "Ocurrió un error inesperado");
-      if (err.message.includes("no está habilitado")) {
-        setShowFixGuide(true);
-      }
-    }
-  };
-
-  const handleGoogleLogin = async () => {
-    setError("");
-    setShowFixGuide(false);
-    try {
-      await loginWithGoogle();
-      setSuccess(true);
-    } catch (err: any) {
-      setError(err.message || "Error con Google");
       if (err.message.includes("no está habilitado")) {
         setShowFixGuide(true);
       }
@@ -893,21 +843,6 @@ function AuthPage() {
             >
               {loading ? "Procesando..." : (isLogin ? "Iniciar Sesión" : "Crear Cuenta")}
               <ChevronRight className="w-4 h-4" />
-            </button>
-
-            <div className="relative py-4">
-              <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-white/5"></div></div>
-              <div className="relative flex justify-center text-[8px] uppercase tracking-[0.4em] text-zinc-600"><span className="bg-zinc-950 px-4">O CONTINÚA CON</span></div>
-            </div>
-
-            <button 
-              type="button"
-              onClick={handleGoogleLogin}
-              disabled={loading}
-              className="w-full h-14 bg-zinc-900 border border-white/10 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] hover:bg-zinc-800 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
-            >
-              <img src="https://www.google.com/favicon.ico" className="w-4 h-4" alt="Google" />
-              Google
             </button>
           </div>
         </form>
