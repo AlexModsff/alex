@@ -8,7 +8,7 @@ import { ShoppingCart, ShieldCheck, Store, ChevronRight, Star, Flame, Trophy, Ta
 import React, { useState, ReactNode, useEffect, createContext, useContext } from "react";
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate, useLocation, Navigate } from "react-router-dom";
 import { auth, db } from "./firebase";
-import { onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
+import { onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updateProfile, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
 
 // Auth Context
@@ -16,6 +16,7 @@ interface AuthContextType {
   user: string | null;
   login: (username: string, password: string) => Promise<void>;
   register: (username: string, password: string) => Promise<void>;
+  loginWithGoogle: () => Promise<void>;
   logout: () => void;
   loading: boolean;
   isInitialCheck: boolean;
@@ -103,6 +104,41 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const loginWithGoogle = async () => {
+    setLoading(true);
+    try {
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      const firebaseUser = result.user;
+      
+      // Check if user exists in Firestore, if not create
+      const cleanUsername = firebaseUser.email?.split('@')[0] || "user_" + firebaseUser.uid.slice(0, 5);
+      const userDoc = await getDoc(doc(db, "users", cleanUsername));
+      
+      if (!userDoc.exists()) {
+        await setDoc(doc(db, "users", cleanUsername), {
+          uid: firebaseUser.uid,
+          username: firebaseUser.displayName || cleanUsername,
+          email: firebaseUser.email,
+          createdAt: serverTimestamp()
+        });
+      }
+      
+      setUser(firebaseUser.displayName || cleanUsername);
+    } catch (err: any) {
+      console.error("Google Login error:", err);
+      if (err.code === "auth/popup-blocked") {
+        throw new Error("El navegador bloqueó la ventana emergente. Por favor, permite las ventanas emergentes.");
+      }
+      if (err.code === "auth/operation-not-allowed") {
+        throw new Error("El inicio de sesión con Google no está habilitado en Firebase. Actívalo en la consola.");
+      }
+      throw new Error("Error al iniciar sesión con Google.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const logout = async () => {
     try {
       await signOut(auth);
@@ -112,7 +148,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, loading, isInitialCheck }}>
+    <AuthContext.Provider value={{ user, login, register, loginWithGoogle, logout, loading, isInitialCheck }}>
       {children}
     </AuthContext.Provider>
   );
@@ -693,8 +729,9 @@ function AuthPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [showFixGuide, setShowFixGuide] = useState(false);
   const [success, setSuccess] = useState(false);
-  const { login, register, loading, user } = useAuth();
+  const { login, register, loginWithGoogle, loading, user } = useAuth();
   const navigate = useNavigate();
 
   if (user && !success) return <Navigate to="/" replace />;
@@ -733,9 +770,25 @@ function AuthPage() {
         await register(username, password);
       }
       setSuccess(true);
-      // The useEffect will handle navigation
     } catch (err: any) {
       setError(err.message || "Ocurrió un error inesperado");
+      if (err.message.includes("no está habilitado")) {
+        setShowFixGuide(true);
+      }
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    setError("");
+    setShowFixGuide(false);
+    try {
+      await loginWithGoogle();
+      setSuccess(true);
+    } catch (err: any) {
+      setError(err.message || "Error con Google");
+      if (err.message.includes("no está habilitado")) {
+        setShowFixGuide(true);
+      }
     }
   };
 
@@ -805,23 +858,58 @@ function AuthPage() {
           </div>
 
           {error && (
-            <motion.p 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-red-500 text-[10px] font-bold uppercase tracking-widest text-center"
+            <motion.div 
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="space-y-4"
             >
-              {error}
-            </motion.p>
+              <p className="text-red-500 text-[10px] font-black uppercase tracking-widest text-center bg-red-500/10 p-4 rounded-xl border border-red-500/20">
+                {error}
+              </p>
+              
+              {showFixGuide && (
+                <div className="bg-zinc-900 border border-white/10 p-6 rounded-2xl space-y-4">
+                  <p className="text-[9px] font-black text-white uppercase tracking-widest text-center">⚠️ ACCIÓN REQUERIDA</p>
+                  <p className="text-[10px] text-zinc-400 font-medium leading-relaxed">
+                    Debes activar los métodos de inicio de sesión en tu consola de Firebase:
+                  </p>
+                  <ol className="text-[10px] text-zinc-500 space-y-2 list-decimal ml-4">
+                    <li>Ve a <a href="https://console.firebase.google.com/" target="_blank" className="text-sky-400 underline">Firebase Console</a></li>
+                    <li>Entra en tu proyecto</li>
+                    <li>Ve a <span className="text-white">Authentication</span> &gt; <span className="text-white">Sign-in method</span></li>
+                    <li>Habilita <span className="text-white">Correo electrónico/contraseña</span></li>
+                    <li>(Opcional) Habilita <span className="text-white">Google</span></li>
+                  </ol>
+                </div>
+              )}
+            </motion.div>
           )}
 
-          <button 
-            type="submit"
-            disabled={loading}
-            className="w-full h-14 bg-white text-black rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] hover:scale-[1.02] active:scale-95 transition-all shadow-xl flex items-center justify-center gap-3 disabled:opacity-50"
-          >
-            {loading ? "Procesando..." : (isLogin ? "Iniciar Sesión" : "Crear Cuenta")}
-            <ChevronRight className="w-4 h-4" />
-          </button>
+          <div className="space-y-4">
+            <button 
+              type="submit"
+              disabled={loading}
+              className="w-full h-14 bg-white text-black rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] hover:scale-[1.02] active:scale-95 transition-all shadow-xl flex items-center justify-center gap-3 disabled:opacity-50"
+            >
+              {loading ? "Procesando..." : (isLogin ? "Iniciar Sesión" : "Crear Cuenta")}
+              <ChevronRight className="w-4 h-4" />
+            </button>
+
+            <div className="relative py-4">
+              <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-white/5"></div></div>
+              <div className="relative flex justify-center text-[8px] uppercase tracking-[0.4em] text-zinc-600"><span className="bg-zinc-950 px-4">O CONTINÚA CON</span></div>
+            </div>
+
+            <button 
+              type="button"
+              onClick={handleGoogleLogin}
+              disabled={loading}
+              className="w-full h-14 bg-zinc-900 border border-white/10 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] hover:bg-zinc-800 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
+            >
+              <img src="https://www.google.com/favicon.ico" className="w-4 h-4" alt="Google" />
+              Google
+            </button>
+          </div>
         </form>
 
         <div className="mt-8 text-center">
