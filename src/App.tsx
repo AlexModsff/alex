@@ -14,6 +14,7 @@ import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
 // Auth Context
 interface AuthContextType {
   user: string | null;
+  rawUsername: string | null;
   login: (username: string, password: string) => Promise<void>;
   register: (username: string, password: string) => Promise<void>;
   logout: () => void;
@@ -23,17 +24,36 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
+const cleanName = (name: string | null) => {
+  if (!name) return null;
+  // Quitar email si existe
+  let clean = name.split('@')[0];
+  // Quitar números al final
+  clean = clean.replace(/\d+$/, '');
+  // Todo en minúsculas
+  clean = clean.toLowerCase();
+  // Limitar a 5-6 caracteres si es largo
+  if (clean.length > 6) {
+    return clean.substring(0, 5);
+  }
+  return clean;
+};
+
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<string | null>(null);
+  const [rawUsername, setRawUsername] = useState<string | null>(null);
   const [isInitialCheck, setIsInitialCheck] = useState(true);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       if (firebaseUser) {
-        setUser(firebaseUser.displayName || firebaseUser.email?.split('@')[0] || "Usuario");
+        const displayName = firebaseUser.displayName || firebaseUser.email?.split('@')[0] || "Usuario";
+        setRawUsername(displayName);
+        setUser(cleanName(displayName));
       } else {
         setUser(null);
+        setRawUsername(null);
       }
       setIsInitialCheck(false);
     });
@@ -46,7 +66,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const email = `${username.toLowerCase().trim()}@alexmods.com`;
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const firebaseUser = userCredential.user;
-      setUser(firebaseUser.displayName || firebaseUser.email?.split('@')[0] || "Usuario");
+      const displayName = firebaseUser.displayName || firebaseUser.email?.split('@')[0] || "Usuario";
+      setRawUsername(displayName);
+      setUser(cleanName(displayName));
     } catch (err: any) {
       console.error("Login error:", err);
       if (err.code === "auth/user-not-found" || err.code === "auth/wrong-password" || err.code === "auth/invalid-credential" || err.code === "auth/invalid-email") {
@@ -83,7 +105,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       });
 
       // Force state update immediately
-      setUser(username);
+      setRawUsername(username);
+      setUser(cleanName(username));
     } catch (err: any) {
       console.error("Register error:", err);
       if (err.code === "auth/email-already-in-use") {
@@ -113,7 +136,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, loading, isInitialCheck }}>
+    <AuthContext.Provider value={{ user, rawUsername, login, register, logout, loading, isInitialCheck }}>
       {children}
     </AuthContext.Provider>
   );
@@ -666,11 +689,14 @@ function Navbar() {
           
           <div className="flex items-center gap-4 md:gap-8 text-[10px] md:text-[11px] font-black uppercase tracking-widest">
             {user ? (
-              <div className="flex items-center gap-4">
-                <span className="text-sky-400 hidden sm:inline">{user}</span>
-                <button onClick={logout} className="text-zinc-400 hover:text-white transition-colors flex items-center gap-2">
+              <div className="flex items-center gap-3 sm:gap-6">
+                <div className="flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
+                  <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+                  <span className="text-white font-black tracking-widest lowercase">{user}</span>
+                </div>
+                <button onClick={logout} className="text-zinc-500 hover:text-white transition-colors flex items-center gap-2">
                   <LogOut className="w-3 h-3" />
-                  Salir
+                  <span className="hidden sm:inline">Salir</span>
                 </button>
               </div>
             ) : (
@@ -1362,8 +1388,17 @@ function Redes() {
 }
 
 function AppContent() {
-  const { isInitialCheck } = useAuth();
+  const { user, isInitialCheck } = useAuth();
   const [recentPurchase, setRecentPurchase] = useState<{ user: string; item: string } | null>(null);
+  const [welcomeToast, setWelcomeToast] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (user) {
+      setWelcomeToast(user);
+      const timer = setTimeout(() => setWelcomeToast(null), 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [user]);
 
   useEffect(() => {
     const names = [
@@ -1442,6 +1477,22 @@ function AppContent() {
         </Routes>
 
         <AnimatePresence>
+          {welcomeToast && (
+            <motion.div
+              initial={{ opacity: 0, y: -50 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -50 }}
+              className="fixed top-24 left-1/2 -translate-x-1/2 z-[60] px-6 py-3 bg-white text-black rounded-full shadow-[0_0_30px_rgba(255,255,255,0.2)] flex items-center gap-3 border border-white/20"
+            >
+              <div className="w-6 h-6 bg-black rounded-full flex items-center justify-center">
+                <ShieldCheck className="w-3.5 h-3.5 text-white" />
+              </div>
+              <p className="text-[10px] font-black uppercase tracking-[0.2em]">
+                Bienvenido, <span className="text-zinc-600">{welcomeToast}</span>
+              </p>
+            </motion.div>
+          )}
+
           {recentPurchase && (
             <motion.div
               initial={{ opacity: 0, x: -20 }}
