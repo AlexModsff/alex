@@ -708,24 +708,24 @@ const ProductCard = React.memo(({ product, index }: { product: Product; index: n
 
 function Navbar() {
   const location = useLocation();
-  const { user, logout } = useAuth();
+  const { user, saldo, esCliente, logout } = useAuth();
   const isActive = (path: string) => location.pathname === path;
 
   return (
     <nav className="sticky top-0 z-50 bg-black/80 backdrop-blur-xl border-b border-zinc-800">
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto px-2 md:px-6">
         <div className="flex justify-between h-20 items-center">
-            <Link to="/" className="flex items-center gap-2">
+            <Link to="/" className="flex items-center gap-0.5 md:gap-1">
               <motion.span 
                 animate={{ y: [0, -2, 0] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                className="text-2xl font-black tracking-tighter text-white uppercase italic"
+                className="text-xl md:text-2xl font-black tracking-tighter text-white uppercase italic"
               >
                 ALEX STORE
               </motion.span>
               <motion.div
                 animate={{ 
-                  x: [0, 8, 0],
+                  x: [0, 4, 0],
                   rotate: [0, -5, 0]
                 }}
                 transition={{ 
@@ -735,21 +735,35 @@ function Navbar() {
                 }}
                 className="text-white"
               >
-                <ShoppingCart className="w-6 h-6" />
+                <ShoppingCart className="w-4 h-4 md:w-5 md:h-5" />
               </motion.div>
             </Link>
           
-          <div className="flex items-center gap-4 md:gap-8 text-[10px] md:text-[11px] font-black uppercase tracking-widest">
+          <div className="flex items-center gap-2 md:gap-8 text-[9px] md:text-[11px] font-black uppercase tracking-widest">
             {user ? (
-              <div className="flex items-center gap-3 sm:gap-6">
-                <div className="flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
-                  <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-                  <span className="text-white font-black tracking-widest lowercase">{user}</span>
-                </div>
-                <button onClick={logout} className="text-zinc-500 hover:text-white transition-colors flex items-center gap-2">
-                  <LogOut className="w-3 h-3" />
-                  <span className="hidden sm:inline">Salir</span>
-                </button>
+              <div className="flex items-center gap-2 md:gap-6">
+                {esCliente ? (
+                  <div className="flex items-center gap-2 px-3 py-1.5 bg-sky-500/10 border border-sky-500/20 rounded-lg shadow-[0_0_15px_rgba(56,189,248,0.1)]">
+                    <Zap className="w-3 h-3 text-sky-400" />
+                    <span className="text-[10px] font-black text-sky-300 uppercase tracking-widest italic">Saldo: ${saldo}</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
+                    <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+                    <span className="text-white font-black tracking-widest lowercase">{user}</span>
+                  </div>
+                )}
+                {/* Only show logout if NOT esCliente or if we want to keep it? 
+                    The user said "remplazando el nombre y el logo de salir", 
+                    so if esCliente is true, I replace both. 
+                    If not esCliente, I keep the old look.
+                */}
+                {!esCliente && (
+                  <button onClick={logout} className="text-zinc-500 hover:text-white transition-colors flex items-center gap-2">
+                    <LogOut className="w-3 h-3" />
+                    <span className="hidden sm:inline">Salir</span>
+                  </button>
+                )}
               </div>
             ) : (
               <Link to="/auth" className={`${isActive('/auth') ? 'text-white' : 'text-zinc-400'} hover:text-white transition-colors flex items-center gap-2`}>
