@@ -4,7 +4,7 @@
  */
 
 import { motion, AnimatePresence } from "motion/react";
-import { ShoppingCart, ShieldCheck, Store, ChevronRight, Star, Flame, Trophy, Target, Youtube, MessageSquare, ChevronLeft, ChevronDown, Clock, Zap, User, Lock, LogIn, UserPlus, LogOut } from "lucide-react";
+import { ShoppingCart, ShieldCheck, Store, ChevronRight, Star, Flame, Trophy, Target, Youtube, MessageSquare, ChevronLeft, ChevronDown, Clock, Zap, User, Lock, LogIn, UserPlus, LogOut, Send, Twitter, Link2 } from "lucide-react";
 import React, { useState, ReactNode, useEffect, createContext, useContext } from "react";
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate, useLocation, Navigate } from "react-router-dom";
 import { auth, db } from "./firebase";
@@ -147,6 +147,16 @@ const useAuth = () => {
   if (!context) throw new Error("useAuth must be used within AuthProvider");
   return context;
 };
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
 
 const ProtectedRoute = ({ children }: { children: ReactNode }) => {
   const { user } = useAuth();
@@ -1110,7 +1120,7 @@ function Productos() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_0%,transparent_70%)]" />
       </div>
 
-      <main className="max-w-7xl mx-auto px-6 py-32 relative z-10">
+      <main className="max-w-7xl mx-auto px-6 pt-32 pb-4 relative z-10">
         <div className="text-center mb-32 relative">
           <div className="inline-block mb-8">
             <div className="flex items-center justify-center gap-4 mb-6">
@@ -1134,7 +1144,7 @@ function Productos() {
         </div>
 
         {/* WhatsApp Support Section - Enhanced */}
-        <div className="mb-32 text-center">
+        <div className="mb-8 text-center">
           <div className="inline-flex flex-col items-center gap-10 p-12 md:p-24 bg-zinc-950 border border-white/5 rounded-[64px] relative overflow-hidden group shadow-2xl">
             <div className="absolute inset-0 bg-gradient-to-br from-emerald-600/10 to-blue-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
             
@@ -1156,7 +1166,7 @@ function Productos() {
               
               <div className="pt-6">
                 <a 
-                  href="https://w.app/f7pkkf"
+                  href="https://wa.me/527122937666?text=No%20encuentre%20mi%20producto%20deseado,%20BUSCO..."
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-6 bg-emerald-500 text-black px-16 py-7 rounded-2xl font-black text-sm uppercase tracking-[0.3em] hover:scale-105 active:scale-95 transition-all shadow-[0_0_50px_rgba(16,185,129,0.4)] group/wa"
@@ -1226,13 +1236,13 @@ function Productos() {
   );
 }
 
-function Redes() {
-  const DiscordIcon = ({ className }: { className?: string }) => (
-    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.419-2.157 2.419zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.419-2.157 2.419z"/>
-    </svg>
-  );
+const DiscordIcon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.419-2.157 2.419zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.419-2.157 2.419z"/>
+  </svg>
+);
 
+function Redes() {
   return (
     <div className="relative min-h-screen bg-black overflow-hidden">
       {/* Immersive Background */}
@@ -1243,7 +1253,7 @@ function Redes() {
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:40px_40px]" />
       </div>
 
-      <main className="max-w-7xl mx-auto px-6 py-32 relative z-10">
+      <main className="max-w-7xl mx-auto px-6 pt-32 pb-12 relative z-10">
         <div className="text-center mb-32 relative">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -1361,7 +1371,7 @@ function Redes() {
               
               <div className="pt-6">
                 <a 
-                  href="https://w.app/fnqtaz"
+                  href="https://wa.me/527122937666?text=Necesito%20ayuda,%20por%20favor.%20%E2%9C%85"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-6 bg-white text-black px-16 py-7 rounded-2xl font-black text-sm uppercase tracking-[0.3em] hover:scale-105 active:scale-95 transition-all shadow-[0_0_50px_rgba(255,255,255,0.2)] group/support"
@@ -1374,12 +1384,6 @@ function Redes() {
             </div>
 
             {/* Decorative Elements */}
-            <div className="absolute bottom-10 left-10 text-[8px] font-mono text-zinc-800 uppercase tracking-widest hidden md:block">
-              System Status: Operational // Support ID: AS-2026
-            </div>
-            <div className="absolute top-10 right-10 text-[8px] font-mono text-zinc-800 uppercase tracking-widest hidden md:block">
-              Latency: 12ms // Region: Global
-            </div>
           </div>
         </motion.div>
       </main>
@@ -1388,7 +1392,7 @@ function Redes() {
 }
 
 function AppContent() {
-  const { user, isInitialCheck } = useAuth();
+  const { user, rawUsername, logout, isInitialCheck } = useAuth();
   const [recentPurchase, setRecentPurchase] = useState<{ user: string; item: string } | null>(null);
   const [welcomeToast, setWelcomeToast] = useState<string | null>(null);
 
@@ -1467,6 +1471,7 @@ function AppContent() {
 
   return (
     <Router>
+      <ScrollToTop />
       <div className="min-h-screen bg-black font-sans text-white selection:bg-white selection:text-black">
         <Navbar />
         <Routes>
@@ -1513,34 +1518,94 @@ function AppContent() {
           )}
         </AnimatePresence>
 
-        <footer className="bg-black border-t border-zinc-900 py-12">
-          <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600">
-            <div className="flex items-center gap-2">
-              <motion.span
-                animate={{ y: [0, -1, 0] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-              >
-                ALEX STORE © 2026
-              </motion.span>
-              <motion.div
-                animate={{ 
-                  x: [0, 5, 0],
-                  rotate: [0, -3, 0]
-                }}
-                transition={{ 
-                  duration: 2, 
-                  repeat: Infinity, 
-                  ease: "easeInOut" 
-                }}
-                className="text-zinc-600"
-              >
-                <ShoppingCart className="w-4 h-4" />
-              </motion.div>
-            </div>
-            <div className="flex gap-8">
-              <a href="#" className="hover:text-white transition-colors">Términos</a>
-              <a href="#" className="hover:text-white transition-colors">Privacidad</a>
-              <a href="#" className="hover:text-white transition-colors">Cookies</a>
+        <footer className="bg-black border-t border-zinc-900 pt-8 pb-16">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-0 items-start">
+              {/* Section 1: Brand & Social */}
+              <div className="flex flex-col items-center md:items-start text-center md:text-left space-y-6">
+                <div className="flex items-center gap-3">
+                  <motion.span
+                    animate={{ y: [0, -1, 0] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                    className="text-xl font-black tracking-tighter text-white uppercase italic"
+                  >
+                    ALEX STORE © 2026
+                  </motion.span>
+                  <motion.div
+                    animate={{ x: [0, 5, 0], rotate: [0, -3, 0] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                    className="text-white"
+                  >
+                    <ShoppingCart className="w-4 h-4" />
+                  </motion.div>
+                </div>
+
+                <p className="text-zinc-500 text-[9px] font-bold max-w-[240px] leading-relaxed uppercase tracking-[0.2em]">
+                  La mejor tienda de llaves digitales para gamers. <br />
+                  Productos premium y soporte 24/7.
+                </p>
+
+                <div className="flex items-center gap-2 pt-1">
+                  {[
+                    { icon: <Send className="w-4 h-4" />, color: "hover:text-sky-400 hover:border-sky-400/50 hover:shadow-[0_0_20px_rgba(56,189,248,0.2)]" },
+                    { icon: <MessageSquare className="w-4 h-4" />, color: "hover:text-emerald-400 hover:border-emerald-400/50 hover:shadow-[0_0_20px_rgba(16,185,129,0.2)]" },
+                    { icon: <DiscordIcon className="w-4 h-4" />, color: "hover:text-indigo-400 hover:border-indigo-400/50 hover:shadow-[0_0_20px_rgba(99,102,241,0.2)]" },
+                    { icon: <Twitter className="w-4 h-4" />, color: "hover:text-blue-400 hover:border-blue-400/50 hover:shadow-[0_0_20_rgba(59,130,246,0.2)]" }
+                  ].map((social, i) => (
+                    <motion.div key={i} whileHover={{ scale: 1.1, y: -2 }} whileTap={{ scale: 0.9 }}>
+                      <Link to="/redes" className={`w-9 h-9 rounded-full border border-white/5 flex items-center justify-center text-zinc-600 transition-all duration-300 bg-zinc-900/50 backdrop-blur-sm ${social.color}`}>
+                        {social.icon}
+                      </Link>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Section 2: Quick Links */}
+              <div className="flex flex-col items-center md:items-start text-center md:text-left space-y-6">
+                <div className="flex items-center gap-2">
+                  <Link2 className="w-4 h-4 text-zinc-500" />
+                  <h3 className="text-[12px] font-black text-white uppercase tracking-[0.3em] italic">Enlaces Rápidos</h3>
+                </div>
+                <div className="flex flex-col gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">
+                  <Link to="/" className="hover:text-white transition-colors">Inicio</Link>
+                  <Link to="/productos" className="hover:text-white transition-colors">Productos</Link>
+                  <Link to="/redes" className="hover:text-white transition-colors">Redes</Link>
+                  <a href="https://wa.me/527122937666" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Soporte</a>
+                </div>
+              </div>
+
+              {/* Section 3: My Account */}
+              <div className="flex flex-col items-center md:items-start text-center md:text-left space-y-6">
+                <div className="flex items-center gap-2">
+                  <User className="w-4 h-4 text-zinc-500" />
+                  <h3 className="text-[12px] font-black text-white uppercase tracking-[0.3em] italic">Mi Cuenta</h3>
+                </div>
+                <div className="space-y-4 w-full">
+                  {user ? (
+                    <div className="flex flex-col items-center md:items-start gap-3">
+                      <div className="flex items-center gap-2">
+                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                        <span className="text-lg font-black text-white uppercase italic tracking-tighter">{rawUsername}</span>
+                      </div>
+                      <button 
+                        onClick={logout}
+                        className="flex items-center gap-2 px-5 py-2 bg-white/5 hover:bg-red-500/10 border border-white/10 hover:border-red-500/20 rounded-xl text-[9px] font-black uppercase tracking-widest text-zinc-500 hover:text-red-400 transition-all group"
+                      >
+                        <LogOut className="w-3 h-3 group-hover:-translate-x-1 transition-transform" />
+                        Cerrar Sesión
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center md:items-start gap-3">
+                      <p className="text-[9px] font-black uppercase tracking-widest text-zinc-600">Sesión no iniciada</p>
+                      <Link to="/auth" className="px-6 py-2.5 bg-white text-black rounded-xl text-[9px] font-black uppercase tracking-widest hover:scale-105 transition-transform">
+                        Entrar
+                      </Link>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </footer>
