@@ -715,7 +715,7 @@ function Navbar() {
     <nav className="sticky top-0 z-50 bg-black/80 backdrop-blur-xl border-b border-zinc-800">
       <div className="max-w-7xl mx-auto px-2 md:px-6">
         <div className="flex justify-between h-20 items-center">
-            <Link to="/" className="flex items-center gap-0.5 md:gap-1">
+            <Link to="/" className="flex items-center gap-0">
               <motion.span 
                 animate={{ y: [0, -2, 0] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
@@ -725,7 +725,7 @@ function Navbar() {
               </motion.span>
               <motion.div
                 animate={{ 
-                  x: [0, 4, 0],
+                  x: [0, 2, 0],
                   rotate: [0, -5, 0]
                 }}
                 transition={{ 
@@ -743,8 +743,8 @@ function Navbar() {
             {user ? (
               <div className="flex items-center gap-2 md:gap-6">
                 {esCliente ? (
-                  <div className="flex items-center gap-2 px-3 py-1.5 bg-sky-500/10 border border-sky-500/20 rounded-lg shadow-[0_0_15px_rgba(56,189,248,0.1)]">
-                    <Zap className="w-3 h-3 text-sky-400" />
+                  <div className="flex items-center flex-nowrap whitespace-nowrap gap-2 px-3 py-1.5 bg-sky-500/10 border border-sky-500/20 rounded-lg shadow-[0_0_15px_rgba(56,189,248,0.1)]">
+                    <Zap className="w-3 h-3 text-sky-400 shrink-0" />
                     <span className="text-[10px] font-black text-sky-300 uppercase tracking-widest italic">Saldo: ${saldo}</span>
                   </div>
                 ) : (
