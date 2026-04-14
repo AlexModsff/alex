@@ -953,7 +953,7 @@ function AuthPage() {
 
 function Inicio() {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
 
   return (
     <div className="flex flex-col bg-black">
@@ -1059,6 +1059,21 @@ function Inicio() {
                   Comunidad VIP
                 </div>
               </motion.button>
+
+              {user && (
+                <motion.button 
+                  onClick={logout}
+                  whileHover={{ scale: 1.05, backgroundColor: "rgba(239,68,68,0.15)" }}
+                  whileTap={{ scale: 0.95 }}
+                  className="group relative w-full sm:w-64 h-16 overflow-hidden rounded-2xl transition-all border border-red-500/30 backdrop-blur-3xl shadow-[0_0_20px_rgba(239,68,68,0.05)]"
+                >
+                  <div className="absolute inset-0 bg-white/5 group-hover:bg-red-500/10 transition-colors" />
+                  <div className="relative w-full h-full flex items-center justify-center gap-4 text-white font-black text-[10px] uppercase tracking-[0.3em]">
+                    <LogOut className="w-4 h-4 text-red-400 group-hover:scale-110 transition-transform" />
+                    Cerrar Sesión
+                  </div>
+                </motion.button>
+              )}
             </div>
           </motion.div>
 
