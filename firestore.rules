@@ -1,45 +1,84 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    
     // ===============================================================
     // Assumed Data Model
     // ===============================================================
     //
+    // Collection: usuarios
+    // Document ID: {uid}
+    // Fields:
+    //   - uid: string (required) - Firebase Auth UID
+    //   - username: string (required) - Display name
+    //   - saldo: number (required) - User balance (admin only update)
+    //   - esCliente: boolean (required) - Customer status (admin only update)
+    //   - createdAt: timestamp (required) - Creation time
+    //
     // Collection: users
     // Document ID: {username}
     // Fields:
-    //   - username: string (required) - Unique username
-    //   - passwordHash: string (required) - Hashed password
+    //   - uid: string (required) - Firebase Auth UID
+    //   - username: string (required) - Display name
     //   - createdAt: timestamp (required) - Creation time
     //
     // ===============================================================
 
-    // ===============================================================
     // Helper Functions
-    // ===============================================================
-    
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && 
+             (request.auth.token.email == "kevinalxeeuu@gmail.com" && request.auth.token.email_verified == true);
+    }
+
     function isValidUser(data) {
-      return data.keys().hasAll(['username', 'passwordHash', 'createdAt']) &&
-             data.username is string && data.username.size() >= 3 && data.username.size() <= 20 &&
-             data.passwordHash is string && data.passwordHash.size() > 0 &&
+      return data.keys().hasAll(['uid', 'username', 'saldo', 'esCliente', 'createdAt']) &&
+             data.uid is string &&
+             data.username is string && data.username.size() > 0 &&
+             data.saldo is number &&
+             data.esCliente is bool &&
              data.createdAt is timestamp;
     }
 
+    // Rules for 'usuarios' collection
+    match /usuarios/{userId} {
+      // Users can only read their own document
+      allow read: if isOwner(userId) || isAdmin();
+      
+      // Allow creation during registration
+      // Initial values must be saldo: 0 and esCliente: false
+      allow create: if isOwner(userId) && 
+                      isValidUser(request.resource.data) &&
+                      request.resource.data.saldo == 0 &&
+                      request.resource.data.esCliente == false;
+      
+      // Only admin can update saldo and esCliente
+      // Users can only update their username (if allowed, but let's restrict it for now to be safe)
+      allow update: if isAdmin() || (
+                      isOwner(userId) && 
+                      isValidUser(request.resource.data) &&
+                      request.resource.data.saldo == resource.data.saldo &&
+                      request.resource.data.esCliente == resource.data.esCliente &&
+                      request.resource.data.uid == resource.data.uid &&
+                      request.resource.data.createdAt == resource.data.createdAt
+                    );
+      
+      allow delete: if isAdmin();
+    }
+
+    // Rules for legacy 'users' collection (username availability)
     match /users/{username} {
-      // Allow reading any user document (to check if username exists)
       allow get: if true;
-      
-      // Allow creation only if authenticated and the document ID matches the username
-      // We also validate the schema.
-      allow create: if request.auth != null && 
-                      request.resource.data.uid == request.auth.uid &&
-                      request.resource.data.username.size() >= 3 &&
-                      request.resource.data.username.size() <= 20;
-      
-      // Only the owner can update or delete their document
-      allow update, delete: if request.auth != null && resource.data.uid == request.auth.uid;
-      
-      allow list: if false;
+      allow create: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
+      allow update, delete: if isAdmin() || (isAuthenticated() && resource.data.uid == request.auth.uid);
+      allow list: if isAdmin();
     }
   }
 }

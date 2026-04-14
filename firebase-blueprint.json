@@ -2,30 +2,38 @@
   "entities": {
     "User": {
       "title": "User",
-      "description": "User account information",
+      "description": "User profile data including balance and status.",
       "type": "object",
       "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Firebase Authentication UID"
+        },
         "username": {
           "type": "string",
-          "description": "Unique username"
+          "description": "Display name of the user"
         },
-        "passwordHash": {
-          "type": "string",
-          "description": "Hashed password"
+        "saldo": {
+          "type": "number",
+          "description": "User's available balance"
+        },
+        "esCliente": {
+          "type": "boolean",
+          "description": "Whether the user is a verified customer"
         },
         "createdAt": {
           "type": "string",
           "format": "date-time",
-          "description": "Account creation timestamp"
+          "description": "When the user document was created"
         }
       },
-      "required": ["username", "passwordHash", "createdAt"]
+      "required": ["uid", "username", "saldo", "esCliente", "createdAt"]
     }
   },
   "firestore": {
-    "/users/{username}": {
+    "/usuarios/{uid}": {
       "schema": "User",
-      "description": "Collection of users indexed by username"
+      "description": "Collection of user profiles indexed by their Auth UID"
     }
   }
 }

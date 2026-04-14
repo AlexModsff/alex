@@ -15,6 +15,8 @@ import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
 interface AuthContextType {
   user: string | null;
   rawUsername: string | null;
+  saldo: number;
+  esCliente: boolean;
   login: (username: string, password: string) => Promise<void>;
   register: (username: string, password: string) => Promise<void>;
   logout: () => void;
@@ -42,18 +44,46 @@ const cleanName = (name: string | null) => {
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<string | null>(null);
   const [rawUsername, setRawUsername] = useState<string | null>(null);
+  const [saldo, setSaldo] = useState<number>(0);
+  const [esCliente, setEsCliente] = useState<boolean>(false);
   const [isInitialCheck, setIsInitialCheck] = useState(true);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         const displayName = firebaseUser.displayName || firebaseUser.email?.split('@')[0] || "Usuario";
         setRawUsername(displayName);
         setUser(cleanName(displayName));
+
+        // Fetch additional data from Firestore 'usuarios' collection
+        try {
+          const userDoc = await getDoc(doc(db, "usuarios", firebaseUser.uid));
+          if (userDoc.exists()) {
+            const data = userDoc.data();
+            setSaldo(data.saldo || 0);
+            setEsCliente(data.esCliente || false);
+          } else {
+            // If document doesn't exist (e.g. legacy user), initialize it
+            const initialData = {
+              uid: firebaseUser.uid,
+              username: displayName,
+              saldo: 0,
+              esCliente: false,
+              createdAt: serverTimestamp()
+            };
+            await setDoc(doc(db, "usuarios", firebaseUser.uid), initialData);
+            setSaldo(0);
+            setEsCliente(false);
+          }
+        } catch (err) {
+          console.error("Error fetching user data:", err);
+        }
       } else {
         setUser(null);
         setRawUsername(null);
+        setSaldo(0);
+        setEsCliente(false);
       }
       setIsInitialCheck(false);
     });
@@ -98,15 +128,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(userCredential.user, { displayName: username });
       
+      // Create document in 'users' for username availability check
       await setDoc(doc(db, "users", cleanUsername), {
         uid: userCredential.user.uid,
         username: username,
         createdAt: serverTimestamp()
       });
 
+      // Create document in 'usuarios' with initial balance and status
+      await setDoc(doc(db, "usuarios", userCredential.user.uid), {
+        uid: userCredential.user.uid,
+        username: username,
+        saldo: 0,
+        esCliente: false,
+        createdAt: serverTimestamp()
+      });
+
       // Force state update immediately
       setRawUsername(username);
       setUser(cleanName(username));
+      setSaldo(0);
+      setEsCliente(false);
     } catch (err: any) {
       console.error("Register error:", err);
       if (err.code === "auth/email-already-in-use") {
@@ -136,7 +178,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, rawUsername, login, register, logout, loading, isInitialCheck }}>
+    <AuthContext.Provider value={{ user, rawUsername, saldo, esCliente, login, register, logout, loading, isInitialCheck }}>
       {children}
     </AuthContext.Provider>
   );
@@ -1392,7 +1434,7 @@ function Redes() {
 }
 
 function AppContent() {
-  const { user, rawUsername, logout, isInitialCheck } = useAuth();
+  const { user, rawUsername, saldo, esCliente, logout, isInitialCheck } = useAuth();
   const [recentPurchase, setRecentPurchase] = useState<{ user: string; item: string } | null>(null);
   const [welcomeToast, setWelcomeToast] = useState<string | null>(null);
 
@@ -1584,9 +1626,17 @@ function AppContent() {
                 <div className="space-y-4 w-full">
                   {user ? (
                     <div className="flex flex-col items-center md:items-start gap-3">
-                      <div className="flex items-center gap-2">
-                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                        <span className="text-lg font-black text-white uppercase italic tracking-tighter">{rawUsername}</span>
+                      <div className="flex flex-col items-center md:items-start gap-1">
+                        <div className="flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                          <span className="text-lg font-black text-white uppercase italic tracking-tighter">{rawUsername}</span>
+                        </div>
+                        {esCliente && (
+                          <div className="flex items-center gap-2 px-3 py-1 bg-sky-500/10 border border-sky-500/20 rounded-lg">
+                            <Zap className="w-3 h-3 text-sky-400" />
+                            <span className="text-[10px] font-black text-sky-300 uppercase tracking-widest">Saldo: ${saldo}</span>
+                          </div>
+                        )}
                       </div>
                       <button 
                         onClick={logout}
