@@ -5,7 +5,7 @@
 
 import { motion, AnimatePresence } from "motion/react";
 import { ShoppingCart, ShieldCheck, Store, ChevronRight, Star, Flame, Trophy, Target, Youtube, MessageSquare, ChevronLeft, ChevronDown, Clock, Zap, User, Lock, LogIn, UserPlus, LogOut, Send, Twitter, Link2 } from "lucide-react";
-import React, { useState, ReactNode, useEffect, createContext, useContext } from "react";
+import React, { useState, ReactNode, useEffect, createContext, useContext, useMemo, useCallback } from "react";
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate, useLocation, Navigate } from "react-router-dom";
 import { auth, db } from "./firebase";
 import { onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updateProfile, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
@@ -117,24 +117,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setLoading(true);
     try {
       const cleanUsername = username.toLowerCase().trim();
-      const email = `${cleanUsername}@alexmods.com`;
+      // Use a unique email based on a random string or timestamp to allow duplicate display names
+      const uniqueId = Math.random().toString(36).substring(2, 8);
+      const email = `${cleanUsername}.${uniqueId}@alexmods.com`;
       
-      // Check if username exists in Firestore
-      const userDoc = await getDoc(doc(db, "users", cleanUsername));
-      if (userDoc.exists()) {
-        throw new Error("El nombre de usuario ya existe");
-      }
-
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(userCredential.user, { displayName: username });
       
-      // Create document in 'users' for username availability check
-      await setDoc(doc(db, "users", cleanUsername), {
-        uid: userCredential.user.uid,
-        username: username,
-        createdAt: serverTimestamp()
-      });
-
       // Create document in 'usuarios' with initial balance and status
       await setDoc(doc(db, "usuarios", userCredential.user.uid), {
         uid: userCredential.user.uid,
@@ -152,7 +141,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } catch (err: any) {
       console.error("Register error:", err);
       if (err.code === "auth/email-already-in-use") {
-        throw new Error("El nombre de usuario ya está registrado");
+        throw new Error("Este nombre de usuario no puede ser procesado. Intenta con otro.");
       }
       if (err.code === "auth/weak-password") {
         throw new Error("La contraseña es muy débil (mínimo 6 caracteres)");
@@ -510,28 +499,28 @@ const ProductCard = React.memo(({ product, index }: { product: Product; index: n
   );
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  const nextImage = (e: React.MouseEvent) => {
+  const nextImage = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
     setCurrentImageIndex((prev) => (prev + 1) % product.mediaUrls.length);
-  };
+  }, [product.mediaUrls.length]);
 
-  const prevImage = (e: React.MouseEvent) => {
+  const prevImage = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
     setCurrentImageIndex((prev) => (prev - 1 + product.mediaUrls.length) % product.mediaUrls.length);
-  };
+  }, [product.mediaUrls.length]);
 
   const currentMediaUrl = product.mediaUrls[currentImageIndex];
-  const isVideo = currentMediaUrl?.endsWith('.mp4');
+  const isVideo = useMemo(() => currentMediaUrl?.endsWith('.mp4'), [currentMediaUrl]);
 
   return (
-    <div className="group relative">
+    <div className="group relative will-change-transform">
       {/* Animated Border Glow */}
       <div className={`absolute -inset-[1px] bg-gradient-to-r ${product.color} rounded-[32px] opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-500`} />
       
       <div className={`relative h-full bg-zinc-950 rounded-[31px] overflow-hidden border border-white/5 shadow-2xl transition-all duration-500 ${
         product.id === 'diamonds-low-price' ? 'opacity-75 grayscale-[0.3]' : ''
       }`}>
-        <div className="relative aspect-[4/3] overflow-hidden">
+        <div className="relative aspect-[4/3] overflow-hidden bg-zinc-900">
           {product.id === 'diamonds-low-price' && (
             <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-[4px]">
               <motion.div 
@@ -564,6 +553,7 @@ const ProductCard = React.memo(({ product, index }: { product: Product; index: n
                 src={currentMediaUrl} 
                 alt={product.name}
                 loading="lazy"
+                decoding="async"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
