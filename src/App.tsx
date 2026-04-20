@@ -1214,10 +1214,10 @@ function Productos() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_0%,transparent_70%)]" />
       </div>
 
-      <main className="max-w-7xl mx-auto px-6 pt-32 pb-4 relative z-10">
-        <div className="text-center mb-32 relative">
-          <div className="inline-block mb-8">
-            <div className="flex items-center justify-center gap-4 mb-6">
+      <main className="max-w-7xl mx-auto px-6 pt-6 pb-4 relative z-10">
+        <div className="text-center mb-12 relative">
+          <div className="inline-block mb-2">
+            <div className="flex items-center justify-center gap-4 mb-2">
               <div className="h-px w-12 bg-gradient-to-r from-transparent to-blue-500" />
               <span className="text-[10px] font-black uppercase tracking-[0.5em] text-blue-400">Elite Selection</span>
               <div className="h-px w-12 bg-gradient-to-l from-transparent to-blue-500" />
@@ -1347,15 +1347,15 @@ function Redes() {
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:40px_40px]" />
       </div>
 
-      <main className="max-w-7xl mx-auto px-6 pt-32 pb-12 relative z-10">
-        <div className="text-center mb-32 relative">
+      <main className="max-w-7xl mx-auto px-6 pt-6 pb-12 relative z-10">
+        <div className="text-center mb-12 relative">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-block mb-8"
+            className="inline-block mb-2"
           >
-            <div className="flex items-center justify-center gap-4 mb-6">
+            <div className="flex items-center justify-center gap-4 mb-2">
               <div className="h-px w-12 bg-gradient-to-r from-transparent to-indigo-500" />
               <span className="text-[10px] font-black uppercase tracking-[0.5em] text-indigo-400">Connect With Us</span>
               <div className="h-px w-12 bg-gradient-to-l from-transparent to-indigo-500" />
