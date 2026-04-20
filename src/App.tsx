@@ -224,7 +224,8 @@ const PRODUCTS: Product[] = [
     description: "La mejor herramienta para dominar el campo de batalla con estilo y precisión.",
     mediaUrls: [
       "https://cdn.phototourl.com/free/2026-04-06-ee00520b-7ff7-486e-9ad3-996fb2b8f41a.jpg",
-      "https://cdn.phototourl.com/free/2026-04-06-148b3b16-37e7-4d72-be76-7d2d32f56b63.jpg"
+      "https://cdn.phototourl.com/free/2026-04-06-148b3b16-37e7-4d72-be76-7d2d32f56b63.jpg",
+      "https://cdn.phototourl.com/free/2026-04-20-fe37d661-d4b7-4f01-b8ad-6f9ab3210d64.jpg"
     ],
     prices: [
       { id: 1, duration: "3 Días", price: 3, isAgotado: true },
@@ -242,6 +243,7 @@ const PRODUCTS: Product[] = [
     description: "La versión optimizada para máxima fluidez y rendimiento. Domina con el poder del verde.",
     mediaUrls: [
       "https://cdn.phototourl.com/free/2026-04-06-738f499d-d1c2-4bd4-bd76-750092c9eb7d.png",
+      "https://video.zig.ht/api/videos/file/1776709798036-29782260.mp4",
       "https://cdn.phototourl.com/free/2026-04-06-39004ccb-4017-4ab3-949f-c4262944bf59.jpg"
     ],
     prices: [
@@ -260,7 +262,7 @@ const PRODUCTS: Product[] = [
     description: "Optimizado para dispositivos sin root. Máxima seguridad y fluidez en cada partida.",
     mediaUrls: [
       "https://cdn.phototourl.com/free/2026-03-22-76ea78a1-3c72-4e78-bd4e-76b81dd7683b.jpg",
-      "https://cdn.phototourl.com/free/2026-04-20-f98046dc-7bfb-487b-911b-74820a24acec.jpg",
+      "https://video.zig.ht/api/videos/file/1776709359530-839824951.mp4",
       "https://cdn.phototourl.com/member/2026-03-22-d125fab5-a77c-40d9-b4d5-3565853aadaa.webp",
       "https://cdn.phototourl.com/free/2026-04-20-d0caaedc-6a07-4ffb-ac26-39a48b66fcd4.jpg",
       "https://cdn.phototourl.com/free/2026-04-20-d0ec8922-75d5-4c0a-a80b-bd5b86e14820.jpg",
@@ -282,7 +284,9 @@ const PRODUCTS: Product[] = [
     description: "La herramienta definitiva para competitivos. Precisión quirúrgica y velocidad extrema.",
     mediaUrls: [
       "https://cdn.phototourl.com/free/2026-03-22-c5cc2a3a-802d-4f73-8851-e91cb13509ca.jpg",
-      "https://cdn.phototourl.com/member/2026-03-22-96db9420-7c33-4b78-b946-a212d07bc622.jpg"
+      "https://cdn.phototourl.com/free/2026-04-20-2be6a425-6f3d-4c66-8273-dddc43f5c3ea.jpg",
+      "https://cdn.phototourl.com/member/2026-03-22-96db9420-7c33-4b78-b946-a212d07bc622.jpg",
+      "https://cdn.phototourl.com/free/2026-04-20-859875e2-dba4-4cd5-9520-83a5eef00024.jpg"
     ],
     prices: [
       { id: 1, duration: "1 Día", price: 2, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%201%20Dia%20en%20HG%20CHEATS%20%F0%9F%94%B5" },
@@ -300,7 +304,8 @@ const PRODUCTS: Product[] = [
     description: "El panel más completo y estable para Free Fire. Incluye Aimbot Pro, ESP Line y Antena.",
     mediaUrls: [
       "https://videotourl.com/videos/1774197053145-3af3060a-762d-4de9-aab1-622c8711c8c3.mp4",
-      "https://cdn.phototourl.com/free/2026-03-22-377e4dc7-0d9c-4830-ae84-65d069746d42.jpg"
+      "https://cdn.phototourl.com/free/2026-03-22-377e4dc7-0d9c-4830-ae84-65d069746d42.jpg",
+      "https://cdn.phototourl.com/free/2026-04-20-06aa664d-edef-46d7-9534-149b8568ed70.jpg"
     ],
     prices: [
       { id: 1, duration: "1 Día", price: 2, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%201%20Dias%20en%20Cuban%20Mods%20%F0%9F%87%A8%F0%9F%87%BA" },
@@ -318,7 +323,9 @@ const PRODUCTS: Product[] = [
     description: "Para cuenta principal, usuarios con iPhone, seguro.",
     mediaUrls: [
       "https://videotourl.com/videos/1774195663595-62429af7-55ed-4b3c-966a-1233b381cfdf.mp4",
-      "https://cdn.phototourl.com/member/2026-03-22-6472f28b-2a7c-4451-b00c-421ac27032cc.jpg"
+      "https://video.zig.ht/api/videos/file/1776710194447-12363127.mp4",
+      "https://cdn.phototourl.com/member/2026-03-22-6472f28b-2a7c-4451-b00c-421ac27032cc.jpg",
+      "https://cdn.phototourl.com/member/2026-04-20-6a07aefe-257f-4969-8acc-2fcfed9ba837.jpg"
     ],
     prices: [
       { id: 1, duration: "1 Día", price: 5, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%201%20Dia%20en%20Fluorite%20iOS%20%F0%9F%9F%A3" },
@@ -514,7 +521,8 @@ const ProductCard = React.memo(({ product, index }: { product: Product; index: n
   }, [product.mediaUrls.length]);
 
   const currentMediaUrl = product.mediaUrls[currentImageIndex];
-  const isVideo = useMemo(() => currentMediaUrl?.endsWith('.mp4'), [currentMediaUrl]);
+  const isVideo = useMemo(() => currentMediaUrl?.endsWith('.mp4') || currentMediaUrl?.endsWith('.webm'), [currentMediaUrl]);
+  const isEmbed = useMemo(() => currentMediaUrl?.includes('screenapp.io') || currentMediaUrl?.includes('youtube.com'), [currentMediaUrl]);
 
   return (
     <div className="group relative will-change-transform">
@@ -538,7 +546,22 @@ const ProductCard = React.memo(({ product, index }: { product: Product; index: n
           )}
           
           <AnimatePresence mode="wait">
-            {isVideo ? (
+            {isEmbed ? (
+              <motion.div
+                key={currentImageIndex}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="w-full h-full"
+              >
+                <iframe
+                  src={currentMediaUrl.includes('screenapp.io') ? currentMediaUrl.replace('/app/v/', '/embed/') : currentMediaUrl}
+                  className="w-full h-full border-0"
+                  allow="autoplay; fullscreen"
+                  title={product.name}
+                />
+              </motion.div>
+            ) : isVideo ? (
               <motion.video
                 key={currentImageIndex}
                 src={currentMediaUrl}
