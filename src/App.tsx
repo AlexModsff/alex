@@ -260,7 +260,11 @@ const PRODUCTS: Product[] = [
     description: "Optimizado para dispositivos sin root. Máxima seguridad y fluidez en cada partida.",
     mediaUrls: [
       "https://cdn.phototourl.com/free/2026-03-22-76ea78a1-3c72-4e78-bd4e-76b81dd7683b.jpg",
-      "https://cdn.phototourl.com/member/2026-03-22-d125fab5-a77c-40d9-b4d5-3565853aadaa.webp"
+      "https://cdn.phototourl.com/free/2026-04-20-f98046dc-7bfb-487b-911b-74820a24acec.jpg",
+      "https://cdn.phototourl.com/member/2026-03-22-d125fab5-a77c-40d9-b4d5-3565853aadaa.webp",
+      "https://cdn.phototourl.com/free/2026-04-20-d0caaedc-6a07-4ffb-ac26-39a48b66fcd4.jpg",
+      "https://cdn.phototourl.com/free/2026-04-20-d0ec8922-75d5-4c0a-a80b-bd5b86e14820.jpg",
+      "https://cdn.phototourl.com/free/2026-04-20-eb336bf5-c7ea-4a89-9bcb-dcd651379508.jpg"
     ],
     prices: [
       { id: 1, duration: "1 Día", price: 3, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%201%20dia%20en%20Drip%20Client%20%F0%9F%9F%A3" },
@@ -583,12 +587,18 @@ const ProductCard = React.memo(({ product, index }: { product: Product; index: n
 
           {/* Media Controls */}
           {product.mediaUrls.length > 1 && (
-            <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30">
-              <button onClick={prevImage} className="p-2 bg-black/60 backdrop-blur-md rounded-full text-white hover:bg-white hover:text-black transition-all">
-                <ChevronLeft className="w-4 h-4" />
+            <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-4 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300 z-30">
+              <button 
+                onClick={prevImage} 
+                className="p-3 lg:p-2 bg-black/60 backdrop-blur-md rounded-full text-white hover:bg-white hover:text-black transition-all active:scale-90"
+              >
+                <ChevronLeft className="w-5 h-5 lg:w-4 lg:h-4" />
               </button>
-              <button onClick={nextImage} className="p-2 bg-black/60 backdrop-blur-md rounded-full text-white hover:bg-white hover:text-black transition-all">
-                <ChevronRight className="w-4 h-4" />
+              <button 
+                onClick={nextImage} 
+                className="p-3 lg:p-2 bg-black/60 backdrop-blur-md rounded-full text-white hover:bg-white hover:text-black transition-all active:scale-90"
+              >
+                <ChevronRight className="w-5 h-5 lg:w-4 lg:h-4" />
               </button>
             </div>
           )}
