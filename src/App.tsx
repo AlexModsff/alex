@@ -1097,6 +1097,19 @@ function Inicio() {
                   </div>
                 </motion.button>
               )}
+
+              <motion.button 
+                onClick={() => window.open('https://wa.me/527122937666?text=Hola,%20vi%20tu%20tienda%20y%20quiero%20que%20me%20crees%20una%20personalizada%20igual%20a%20la%20tuya%20mi%20presupuesto%20es%20de%20$:%20', '_blank')}
+                whileHover={{ scale: 1.05, boxShadow: "0 0 40px rgba(52,211,153,0.4)" }}
+                whileTap={{ scale: 0.95 }}
+                className="group relative w-full sm:w-64 h-16 overflow-hidden rounded-2xl transition-all border border-emerald-500/30 backdrop-blur-3xl shadow-[0_0_20px_rgba(52,211,153,0.05)]"
+              >
+                <div className="absolute inset-0 bg-white/5 group-hover:bg-emerald-500/10 transition-colors" />
+                <div className="relative w-full h-full flex items-center justify-center gap-4 text-white font-black text-[10px] uppercase tracking-[0.3em] px-4 text-center">
+                  <Store className="w-4 h-4 text-emerald-400 group-hover:scale-110 transition-transform flex-shrink-0" />
+                  <span>TE CREO TU TIENDA PERSONALIZADA</span>
+                </div>
+              </motion.button>
             </div>
           </motion.div>
 
