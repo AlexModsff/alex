@@ -1342,28 +1342,28 @@ function Redes() {
               name: "TikTok", 
               icon: <img src="https://cdn.phototourl.com/member/2026-03-23-6aff48f7-acdb-4dc4-9038-75d96031bff8.png" className="w-12 h-12 object-contain" referrerPolicy="no-referrer" />, 
               color: "from-cyan-500/20 to-pink-500/20", 
-              glow: "group-hover:shadow-[0_0_40px_rgba(34,211,238,0.3)]",
-              borderColor: "border-cyan-500/30",
-              link: "https://www.tiktok.com/@alexmodsstore?_r=1&_t=ZS-94v26mzvM4w",
-              handle: "@alexmodsstore"
+              glow: "group-hover:shadow-[0_0_40px_rgba(34,211,238,0.3)]", 
+              borderColor: "border-cyan-500/30", 
+              link: "https://www.tiktok.com/@alexffmods?_r=1&_t=ZS-95gQiT1Z1yT", 
+              handle: "@alexffmods"
             },
             { 
               name: "WhatsApp", 
               icon: <img src="https://cdn.phototourl.com/member/2026-03-23-1e2a11e1-06e3-48b5-b453-d187da391138.png" className="w-12 h-12 object-contain" referrerPolicy="no-referrer" />, 
               color: "from-emerald-500/20 to-green-600/20", 
-              glow: "group-hover:shadow-[0_0_40px_rgba(16,185,129,0.3)]",
-              borderColor: "border-emerald-500/30",
-              link: "https://whatsapp.com/channel/0029Vb7tFdmBA1f7ZQBU3T3u",
+              glow: "group-hover:shadow-[0_0_40px_rgba(16,185,129,0.3)]", 
+              borderColor: "border-emerald-500/30", 
+              link: "https://whatsapp.com/channel/0029Vb858Dy6WaKo7Pie8345", 
               handle: "Canal Oficial"
             },
             { 
               name: "YouTube", 
               icon: <Youtube className="w-10 h-10 text-red-500" />, 
               color: "from-red-500/20 to-red-700/20", 
-              glow: "group-hover:shadow-[0_0_40px_rgba(239,68,68,0.3)]",
-              borderColor: "border-red-500/30",
-              link: "https://youtube.com/@alexmods13?si=7WPy3G44pcofK6W6",
-              handle: "@alexmods13"
+              glow: "group-hover:shadow-[0_0_40px_rgba(239,68,68,0.3)]", 
+              borderColor: "border-red-500/30", 
+              link: "https://www.youtube.com/@alexmodsffr", 
+              handle: "@alexmodsffr"
             },
             { 
               name: "Discord", 
@@ -1374,35 +1374,40 @@ function Redes() {
               link: "#",
               handle: "Comunidad VIP"
             }
-          ].map((social, i) => (
-            <motion.a
-              key={i}
-              href={social.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-              viewport={{ once: true }}
-              whileHover={{ y: -10, scale: 1.02 }}
-              className={`group relative p-10 bg-zinc-900/40 backdrop-blur-xl border ${social.borderColor} rounded-[40px] flex flex-col items-center gap-8 transition-all duration-500 ${social.glow} overflow-hidden`}
-            >
-              <div className={`absolute inset-0 bg-gradient-to-br ${social.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-              
-              <div className="relative z-10 w-24 h-24 bg-black/40 rounded-3xl flex items-center justify-center border border-white/5 shadow-2xl group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
-                {social.icon}
-              </div>
-              
-              <div className="relative z-10 text-center">
-                <h3 className="text-2xl font-black text-white uppercase italic tracking-tighter mb-1">{social.name}</h3>
-                <p className="text-zinc-500 text-[10px] font-bold uppercase tracking-widest">{social.handle}</p>
-              </div>
+          ].map((social, i) => {
+            const isClickable = social.link !== "#";
+            const Component = isClickable ? motion.a : motion.div;
+            
+            return (
+              <Component
+                key={i}
+                href={isClickable ? social.link : undefined}
+                target={isClickable ? "_blank" : undefined}
+                rel={isClickable ? "noopener noreferrer" : undefined}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+                viewport={{ once: true }}
+                whileHover={{ y: -10, scale: 1.02 }}
+                className={`group relative p-10 bg-zinc-900/40 backdrop-blur-xl border ${social.borderColor} rounded-[40px] flex flex-col items-center gap-8 transition-all duration-500 ${social.glow} overflow-hidden ${isClickable ? 'cursor-pointer' : 'cursor-default'}`}
+              >
+                <div className={`absolute inset-0 bg-gradient-to-br ${social.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+                
+                <div className="relative z-10 w-24 h-24 bg-black/40 rounded-3xl flex items-center justify-center border border-white/5 shadow-2xl group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
+                  {social.icon}
+                </div>
+                
+                <div className="relative z-10 text-center">
+                  <h3 className="text-2xl font-black text-white uppercase italic tracking-tighter mb-1">{social.name}</h3>
+                  <p className="text-zinc-500 text-[10px] font-bold uppercase tracking-widest">{social.handle}</p>
+                </div>
 
-              <div className="relative z-10 mt-4 flex items-center gap-2 text-[10px] font-black text-white/40 uppercase tracking-[0.3em] group-hover:text-white transition-colors">
-                Seguir <ChevronRight className="w-3 h-3 transition-transform group-hover:translate-x-1" />
-              </div>
-            </motion.a>
-          ))}
+                <div className="relative z-10 mt-4 flex items-center gap-2 text-[10px] font-black text-white/40 uppercase tracking-[0.3em] group-hover:text-white transition-colors">
+                  {isClickable ? "Seguir" : "Próximamente"} <ChevronRight className={`w-3 h-3 transition-transform ${isClickable ? 'group-hover:translate-x-1' : 'opacity-0'}`} />
+                </div>
+              </Component>
+            );
+          })}
         </div>
 
         {/* Support Section - Enhanced Mission Control Style */}
