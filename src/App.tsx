@@ -219,6 +219,24 @@ interface Product {
 
 const PRODUCTS: Product[] = [
   {
+    id: "pato-team-no-root",
+    name: "Pato Team (No Root)",
+    description: "Versión especializada para dispositivos No Root. Máxima seguridad sin necesidad de acceso superusuario.",
+    mediaUrls: [
+      "https://img.sanishtech.com/u/001ce07617565976e71a3a69c1c3f6f2.jpg",
+      "https://img.sanishtech.com/u/291edbfaa990ae61320bc46d4158f691.jpeg",
+      "https://img.sanishtech.com/u/e2398b3860ee627e58bfe45cb17d1daa.jpeg",
+      "https://img.sanishtech.com/u/97a7f29500d3c488a190a808df523a5b.jpeg"
+    ],
+    prices: [
+      { id: 1, duration: "30 Días", price: 15, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2030%20dias%20en%20Pato%20Team%20No%20Root%20%F0%9F%9F%A1" },
+    ],
+    features: ["Optimizado No Root", "Instalación Sencilla", "Ant-Ban de Élite"],
+    rating: 5.0,
+    color: "from-yellow-400 to-amber-500",
+    icon: <img src="https://img.sanishtech.com/u/89aa8172a8f9a19c0db93ab16f1150cc.jpeg" className="w-full h-full object-cover border-2 border-yellow-400 rounded-lg" referrerPolicy="no-referrer" />
+  },
+  {
     id: "pato-team-azul",
     name: "Pato Team Azul",
     description: "La mejor herramienta para dominar el campo de batalla con estilo y precisión.",
@@ -230,7 +248,7 @@ const PRODUCTS: Product[] = [
     prices: [
       { id: 1, duration: "3 Días", price: 3, isAgotado: true },
       { id: 2, duration: "7 Días", price: 9, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%207%20dias%20en%20Pato%20Team%20Azul%20%F0%9F%94%B5" },
-      { id: 3, duration: "30 Días", price: 14, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2030%20dias%20en%20Pato%20Team%20Azul%20%F0%9F%94%B5" },
+      { id: 3, duration: "30 Días", price: 15, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2030%20dias%20en%20Pato%20Team%20Azul%20%F0%9F%94%B5" },
     ],
     features: ["Aimbot Avanzado", "ESP Customizable", "Seguridad Reforzada"],
     rating: 5.0,
@@ -249,7 +267,7 @@ const PRODUCTS: Product[] = [
     prices: [
       { id: 1, duration: "3 Días", price: 3, isAgotado: true },
       { id: 2, duration: "7 Días", price: 9, isAgotado: true },
-      { id: 3, duration: "30 Días", price: 14, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2030%20dias%20en%20Pato%20Team%20Verde%20%F0%9F%9F%A2" },
+      { id: 3, duration: "30 Días", price: 15, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2030%20dias%20en%20Pato%20Team%20Verde%20%F0%9F%9F%A2" },
     ],
     features: ["Optimización Verde", "ESP Ultra-Rápido", "Bypass Indetectable"],
     rating: 5.0,
@@ -673,7 +691,11 @@ const ProductCard = React.memo(({ product, index }: { product: Product; index: n
           ) : (
             <div className="space-y-4">
               {(product.prices.length > 1 || (product.prices[0] && product.prices[0].duration !== "")) && (
-                <div className="grid grid-cols-3 gap-2">
+                <div className={`grid gap-2 ${
+                  product.prices.length === 1 ? 'grid-cols-1 max-w-[160px] mx-auto' : 
+                  product.prices.length === 2 ? 'grid-cols-2' : 
+                  'grid-cols-3'
+                }`}>
                   {product.prices.map((price) => {
                     const isSelected = selectedPriceId === price.id;
                     const isAgotado = price.isAgotado;
@@ -682,7 +704,7 @@ const ProductCard = React.memo(({ product, index }: { product: Product; index: n
                       <button
                         key={price.id}
                         onClick={() => setSelectedPriceId(price.id)}
-                        className={`relative py-3 rounded-xl border transition-all duration-300 ${
+                        className={`relative py-3 px-2 rounded-xl border transition-all duration-300 flex flex-col items-center justify-center text-center ${
                           isAgotado
                             ? isSelected
                               ? "border-red-500 bg-red-500/20 text-red-500 shadow-[0_0_20px_rgba(239,68,68,0.3)]"
