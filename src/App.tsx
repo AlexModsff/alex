@@ -4,7 +4,7 @@
  */
 
 import { motion, AnimatePresence } from "motion/react";
-import { ShoppingCart, ShieldCheck, Store, ChevronRight, Star, Flame, Trophy, Target, Youtube, MessageSquare, ChevronLeft, ChevronDown, Clock, Zap, User, Lock, LogIn, UserPlus, LogOut, Send, Twitter, Link2 } from "lucide-react";
+import { ShoppingCart, ShieldCheck, Store, ChevronRight, Star, Flame, Trophy, Target, Youtube, MessageSquare, ChevronLeft, ChevronDown, Clock, Zap, User, Lock, LogIn, UserPlus, LogOut, Send, Twitter, Link2, Share2, Check } from "lucide-react";
 import React, { useState, ReactNode, useEffect, createContext, useContext, useMemo, useCallback } from "react";
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate, useLocation, Navigate } from "react-router-dom";
 import { auth, db } from "./firebase";
@@ -527,6 +527,34 @@ const ProductCard = React.memo(({ product, index }: { product: Product; index: n
     product.prices.find(p => !p.isAgotado)?.id || product.prices[0].id
   );
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [copied, setCopied] = useState(false);
+
+  const handleShare = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const shareData = {
+      title: `Alex FF Mods - ${product.name}`,
+      text: `Mira este producto en Alex FF Mods: ${product.name}`,
+      url: window.location.href.split('#')[0] + '#' + product.id
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        console.log('Share cancelled or failed');
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(shareData.url);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      } catch (err) {
+        console.error('Failed to copy text: ', err);
+      }
+    }
+  };
 
   const nextImage = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
@@ -543,7 +571,7 @@ const ProductCard = React.memo(({ product, index }: { product: Product; index: n
   const isEmbed = useMemo(() => currentMediaUrl?.includes('screenapp.io') || currentMediaUrl?.includes('youtube.com'), [currentMediaUrl]);
 
   return (
-    <div className="group relative will-change-transform">
+    <div className="group relative will-change-transform" id={product.id}>
       {/* Animated Border Glow */}
       <div className={`absolute -inset-[1px] bg-gradient-to-r ${product.color} rounded-[32px] opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-500`} />
       
@@ -624,6 +652,22 @@ const ProductCard = React.memo(({ product, index }: { product: Product; index: n
                 </div>
               )}
             </div>
+
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={handleShare}
+              className="bg-black/60 backdrop-blur-md text-white p-2 rounded-xl border border-white/10 hover:bg-white hover:text-black transition-all flex items-center gap-2 group/share"
+            >
+              {copied ? (
+                <>
+                  <Check className="w-3.5 h-3.5 text-green-400" />
+                  <span className="text-[10px] font-black uppercase tracking-tighter pr-1">Copiado</span>
+                </>
+              ) : (
+                <Share2 className="w-3.5 h-3.5" />
+              )}
+            </motion.button>
           </div>
 
           {/* Media Controls */}
