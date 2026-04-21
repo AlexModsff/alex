@@ -717,7 +717,7 @@ const ProductCard = React.memo(({ product, index }: { product: Product; index: n
                         <div className="text-[8px] font-black uppercase tracking-tighter mb-0.5">
                           {price.duration} {isAgotado && "(Agotado)"}
                         </div>
-                        <div className="text-sm font-black">${price.price}</div>
+                        <div className="text-sm font-black">${price.price} USD</div>
                       </button>
                     );
                   })}
