@@ -223,13 +223,13 @@ const PRODUCTS: Product[] = [
     name: "Pato Team (No Root)",
     description: "Versión especializada para dispositivos No Root. Máxima seguridad sin necesidad de acceso superusuario.",
     mediaUrls: [
-      "https://img.sanishtech.com/u/001ce07617565976e71a3a69c1c3f6f2.jpg",
+      "https://plain-wnam-prod-public.komododecks.com/202604/21/K8yv25jmdxnNPca4Yyuv/image.png",
       "https://img.sanishtech.com/u/291edbfaa990ae61320bc46d4158f691.jpeg",
       "https://img.sanishtech.com/u/e2398b3860ee627e58bfe45cb17d1daa.jpeg",
       "https://img.sanishtech.com/u/97a7f29500d3c488a190a808df523a5b.jpeg"
     ],
     prices: [
-      { id: 1, duration: "30 Días", price: 15, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2030%20dias%20en%20Pato%20Team%20No%20Root%20%F0%9F%9F%A1" },
+      { id: 1, duration: "30 Días", price: 15, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2030%20dias%20en%20Pato%20Team%20No%20Root%20%F0%9F%9F%A1.%20Total%20a%20pagar:%20$15%20USD" },
     ],
     features: ["Optimizado No Root", "Instalación Sencilla", "Ant-Ban de Élite"],
     rating: 5.0,
@@ -247,8 +247,8 @@ const PRODUCTS: Product[] = [
     ],
     prices: [
       { id: 1, duration: "3 Días", price: 3, isAgotado: true },
-      { id: 2, duration: "7 Días", price: 9, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%207%20dias%20en%20Pato%20Team%20Azul%20%F0%9F%94%B5" },
-      { id: 3, duration: "30 Días", price: 15, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2030%20dias%20en%20Pato%20Team%20Azul%20%F0%9F%94%B5" },
+      { id: 2, duration: "7 Días", price: 9, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%207%20dias%20en%20Pato%20Team%20Azul%20%F0%9F%94%B5.%20Total%20a%20pagar:%20$9%20USD" },
+      { id: 3, duration: "30 Días", price: 15, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2030%20dias%20en%20Pato%20Team%20Azul%20%F0%9F%94%B5.%20Total%20a%20pagar:%20$15%20USD" },
     ],
     features: ["Aimbot Avanzado", "ESP Customizable", "Seguridad Reforzada"],
     rating: 5.0,
@@ -267,7 +267,7 @@ const PRODUCTS: Product[] = [
     prices: [
       { id: 1, duration: "3 Días", price: 3, isAgotado: true },
       { id: 2, duration: "7 Días", price: 9, isAgotado: true },
-      { id: 3, duration: "30 Días", price: 15, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2030%20dias%20en%20Pato%20Team%20Verde%20%F0%9F%9F%A2" },
+      { id: 3, duration: "30 Días", price: 15, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2030%20dias%20en%20Pato%20Team%20Verde%20%F0%9F%9F%A2.%20Total%20a%20pagar:%20$15%20USD" },
     ],
     features: ["Optimización Verde", "ESP Ultra-Rápido", "Bypass Indetectable"],
     rating: 5.0,
@@ -287,9 +287,9 @@ const PRODUCTS: Product[] = [
       "https://cdn.phototourl.com/free/2026-04-20-eb336bf5-c7ea-4a89-9bcb-dcd651379508.jpg"
     ],
     prices: [
-      { id: 1, duration: "1 Día", price: 3, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%201%20dia%20en%20Drip%20Client%20%F0%9F%9F%A3" },
-      { id: 2, duration: "7 Días", price: 8, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%207%20dias%20en%20Drip%20Client%20%F0%9F%9F%A3" },
-      { id: 3, duration: "30 Días", price: 15, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2030%20dias%20en%20Drip%20Client%20%F0%9F%9F%A3" },
+      { id: 1, duration: "1 Día", price: 3, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%201%20dia%20en%20Drip%20Client%20%F0%9F%9F%A3.%20Total%20a%20pagar:%20$3%20USD" },
+      { id: 2, duration: "7 Días", price: 8, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%207%20dias%20en%20Drip%20Client%20%F0%9F%9F%A3.%20Total%20a%20pagar:%20$8%20USD" },
+      { id: 3, duration: "30 Días", price: 15, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2030%20dias%20en%20Drip%20Client%20%F0%9F%9F%A3.%20Total%20a%20pagar:%20$15%20USD" },
     ],
     features: ["No requiere Root", "Optimización de FPS", "Invisible a Grabaciones"],
     rating: 4.8,
@@ -307,9 +307,9 @@ const PRODUCTS: Product[] = [
       "https://cdn.phototourl.com/free/2026-04-20-859875e2-dba4-4cd5-9520-83a5eef00024.jpg"
     ],
     prices: [
-      { id: 1, duration: "1 Día", price: 2, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%201%20Dia%20en%20HG%20CHEATS%20%F0%9F%94%B5" },
-      { id: 2, duration: "10 Días", price: 7, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2010%20Dias%20en%20HG%20CHEATS%20%F0%9F%94%B5" },
-      { id: 3, duration: "30 Días", price: 12, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2030%20Dias%20en%20HG%20CHEATS%20%F0%9F%94%B5" },
+      { id: 1, duration: "1 Día", price: 2, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%201%20Dia%20en%20HG%20CHEATS%20%F0%9F%94%B5.%20Total%20a%20pagar:%20$2%20USD" },
+      { id: 2, duration: "10 Días", price: 7, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2010%20Dias%20en%20HG%20CHEATS%20%F0%9F%94%B5.%20Total%20a%20pagar:%20$7%20USD" },
+      { id: 3, duration: "30 Días", price: 12, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2030%20Dias%20en%20HG%20CHEATS%20%F0%9F%94%B5.%20Total%20a%20pagar:%20$12%20USD" },
     ],
     features: ["Magic Bullet", "Speed Hack Safe", "Auto Headshot"],
     rating: 5.0,
@@ -326,9 +326,9 @@ const PRODUCTS: Product[] = [
       "https://cdn.phototourl.com/free/2026-04-20-06aa664d-edef-46d7-9534-149b8568ed70.jpg"
     ],
     prices: [
-      { id: 1, duration: "1 Día", price: 2, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%201%20Dias%20en%20Cuban%20Mods%20%F0%9F%87%A8%F0%9F%87%BA" },
-      { id: 2, duration: "7 Días", price: 7, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%207%20Dias%20en%20Cuban%20Mods%20%F0%9F%87%A8%F0%9F%87%BA" },
-      { id: 3, duration: "30 Días", price: 12, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2030%20Dias%20en%20Cuban%20Mods%20%F0%9F%87%A8%F0%9F%87%BA" },
+      { id: 1, duration: "1 Día", price: 2, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%201%20Dias%20en%20Cuban%20Mods%20%F0%9F%87%A8%F0%9F%87%BA.%20Total%20a%20pagar:%20$2%20USD" },
+      { id: 2, duration: "7 Días", price: 7, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%207%20Dias%20en%20Cuban%20Mods%20%F0%9F%87%A8%F0%9F%87%BA.%20Total%20a%20pagar:%20$7%20USD" },
+      { id: 3, duration: "30 Días", price: 12, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2030%20Dias%20en%20Cuban%20Mods%20%F0%9F%87%A8%F0%9F%87%BA.%20Total%20a%20pagar:%20$12%20USD" },
     ],
     features: ["Aimbot 100% Real", "ESP Name & Distance", "Bypass Anti-Ban"],
     rating: 4.9,
@@ -346,9 +346,9 @@ const PRODUCTS: Product[] = [
       "https://cdn.phototourl.com/member/2026-04-20-6a07aefe-257f-4969-8acc-2fcfed9ba837.jpg"
     ],
     prices: [
-      { id: 1, duration: "1 Día", price: 5, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%201%20Dia%20en%20Fluorite%20iOS%20%F0%9F%9F%A3" },
-      { id: 2, duration: "7 Días", price: 15, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%207%20Dias%20en%20Fluorite%20iOS%20%F0%9F%9F%A3" },
-      { id: 3, duration: "30 Días", price: 25, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2030%20Dias%20en%20Fluorite%20iOS%20%F0%9F%9F%A3" },
+      { id: 1, duration: "1 Día", price: 5, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%201%20Dia%20en%20Fluorite%20iOS%20%F0%9F%9F%A3.%20Total%20a%20pagar:%20$5%20USD" },
+      { id: 2, duration: "7 Días", price: 15, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%207%20Dias%20en%20Fluorite%20iOS%20%F0%9F%9F%A3.%20Total%20a%20pagar:%20$15%20USD" },
+      { id: 3, duration: "30 Días", price: 25, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2030%20Dias%20en%20Fluorite%20iOS%20%F0%9F%9F%A3.%20Total%20a%20pagar:%20$25%20USD" },
     ],
     features: ["Aimbot todo rojo", "Antena", "Para cuentas principales"],
     rating: 5.0,
@@ -365,8 +365,8 @@ const PRODUCTS: Product[] = [
     ],
     prices: [
       { id: 1, duration: "1 Día", price: 3, isAgotado: true },
-      { id: 2, duration: "7 Días", price: 9, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%207%20Dias%20en%20BR%20MODS%20ROOT%20%F0%9F%94%B5" },
-      { id: 3, duration: "30 Días", price: 15, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2030%20Dias%20en%20BR%20MODS%20ROOT%20%F0%9F%94%B5" },
+      { id: 2, duration: "7 Días", price: 9, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%207%20Dias%20en%20BR%20MODS%20ROOT%20%F0%9F%94%B5.%20Total%20a%20pagar:%20$9%20USD" },
+      { id: 3, duration: "30 Días", price: 15, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2030%20Dias%20en%20BR%20MODS%20ROOT%20%F0%9F%94%B5.%20Total%20a%20pagar:%20$15%20USD" },
     ],
     features: ["Para usuarios ROOT", "Cuenta Principal", "Aimbot"],
     rating: 5.0,
@@ -382,9 +382,9 @@ const PRODUCTS: Product[] = [
       "https://cdn.phototourl.com/free/2026-04-06-dbbde1be-29aa-4995-8301-1a4f98da4074.png"
     ],
     prices: [
-      { id: 1, duration: "1 Día", price: 4, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%201%20Dia%20en%20Proxi%20iPhone%20%F0%9F%9F%A1" },
-      { id: 2, duration: "7 Días", price: 9, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%207%20Dias%20en%20Proxi%20iPhone%20%F0%9F%9F%A1" },
-      { id: 3, duration: "30 Días", price: 15, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2030%20Dias%20en%20Proxi%20iPhone%20%F0%9F%9F%A1" },
+      { id: 1, duration: "1 Día", price: 4, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%201%20Dia%20en%20Proxi%20iPhone%20%F0%9F%9F%A1.%20Total%20a%20pagar:%20$4%20USD" },
+      { id: 2, duration: "7 Días", price: 9, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%207%20Dias%20en%20Proxi%20iPhone%20%F0%9F%9F%A1.%20Total%20a%20pagar:%20$9%20USD" },
+      { id: 3, duration: "30 Días", price: 15, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2030%20Dias%20en%20Proxi%20iPhone%20%F0%9F%9F%A1.%20Total%20a%20pagar:%20$15%20USD" },
     ],
     features: ["Optimizado para iOS", "Seguridad Máxima", "Sin Lag"],
     rating: 5.0,
@@ -629,18 +629,33 @@ const ProductCard = React.memo(({ product, index }: { product: Product; index: n
           {/* Media Controls */}
           {product.mediaUrls.length > 1 && (
             <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-4 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300 z-30">
-              <button 
-                onClick={prevImage} 
-                className="p-3 lg:p-2 bg-black/60 backdrop-blur-md rounded-full text-white hover:bg-white hover:text-black transition-all active:scale-90"
-              >
-                <ChevronLeft className="w-5 h-5 lg:w-4 lg:h-4" />
-              </button>
-              <button 
-                onClick={nextImage} 
-                className="p-3 lg:p-2 bg-black/60 backdrop-blur-md rounded-full text-white hover:bg-white hover:text-black transition-all active:scale-90"
-              >
-                <ChevronRight className="w-5 h-5 lg:w-4 lg:h-4" />
-              </button>
+              <div className="relative group/btn">
+                <motion.div 
+                  animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.1, 1] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  className={`absolute -inset-1 bg-gradient-to-r ${product.color} rounded-full blur-md opacity-40`}
+                />
+                <button 
+                  onClick={prevImage} 
+                  className="relative p-3 lg:p-2 bg-black/80 backdrop-blur-md rounded-full text-white hover:bg-white hover:text-black transition-all active:scale-90 border border-white/20"
+                >
+                  <ChevronLeft className="w-5 h-5 lg:w-4 lg:h-4" />
+                </button>
+              </div>
+
+              <div className="relative group/btn">
+                <motion.div 
+                  animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.1, 1] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  className={`absolute -inset-1 bg-gradient-to-r ${product.color} rounded-full blur-md opacity-40`}
+                />
+                <button 
+                  onClick={nextImage} 
+                  className="relative p-3 lg:p-2 bg-black/80 backdrop-blur-md rounded-full text-white hover:bg-white hover:text-black transition-all active:scale-90 border border-white/20"
+                >
+                  <ChevronRight className="w-5 h-5 lg:w-4 lg:h-4" />
+                </button>
+              </div>
             </div>
           )}
 
@@ -690,6 +705,19 @@ const ProductCard = React.memo(({ product, index }: { product: Product; index: n
             </div>
           ) : (
             <div className="space-y-4">
+              {['pato-team-no-root', 'pato-team-azul', 'pato-team-verde', 'drip', 'hg', 'cuban'].includes(product.id) && (
+                <motion.a
+                  href="https://whatsapp.com/channel/0029Vb858Dy6WaKo7Pie8345"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="flex items-center justify-center gap-2 py-2 px-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-black uppercase tracking-widest hover:bg-emerald-500/20 transition-all duration-300"
+                >
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" className="w-3 h-3" alt="WhatsApp" />
+                  Canal de actualizaciones
+                </motion.a>
+              )}
               {(product.prices.length > 1 || (product.prices[0] && product.prices[0].duration !== "")) && (
                 <div className={`grid gap-2 ${
                   product.prices.length === 1 ? 'grid-cols-1 max-w-[160px] mx-auto' : 
