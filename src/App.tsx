@@ -297,24 +297,25 @@ const PRODUCTS: Product[] = [
     icon: <img src="https://cdn.phototourl.com/free/2026-03-22-5f523836-ad3a-420b-8ed6-f0e8c533b06f.png" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
   },
   {
-    id: "hg",
-    name: "HG CHEATS",
-    description: "La herramienta definitiva para competitivos. Precisión quirúrgica y velocidad extrema.",
+    id: "drip-root",
+    name: "Drip Client (ROOT)",
+    description: "Versión definitiva para dispositivos con acceso root. Máximo control y precisión absoluta en el campo de batalla.",
     mediaUrls: [
-      "https://cdn.phototourl.com/free/2026-03-22-c5cc2a3a-802d-4f73-8851-e91cb13509ca.jpg",
-      "https://cdn.phototourl.com/free/2026-04-20-2be6a425-6f3d-4c66-8273-dddc43f5c3ea.jpg",
-      "https://cdn.phototourl.com/member/2026-03-22-96db9420-7c33-4b78-b946-a212d07bc622.jpg",
-      "https://cdn.phototourl.com/free/2026-04-20-859875e2-dba4-4cd5-9520-83a5eef00024.jpg"
+      "https://plain-wnam-prod-public.komododecks.com/202604/22/QHoeloQKBdfvvE09u1an/image.jpg",
+      "https://cdn.phototourl.com/member/2026-03-22-d125fab5-a77c-40d9-b4d5-3565853aadaa.webp",
+      "https://cdn.phototourl.com/free/2026-04-20-d0caaedc-6a07-4ffb-ac26-39a48b66fcd4.jpg",
+      "https://video.zig.ht/api/videos/file/1776709359530-839824951.mp4",
+      "https://cdn.phototourl.com/free/2026-04-20-d0ec8922-75d5-4c0a-a80b-bd5b86e14820.jpg"
     ],
     prices: [
-      { id: 1, duration: "1 Día", price: 2, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%201%20Dia%20en%20HG%20CHEATS%20%F0%9F%94%B5.%20Total%20a%20pagar:%20$2%20USD" },
-      { id: 2, duration: "10 Días", price: 7, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2010%20Dias%20en%20HG%20CHEATS%20%F0%9F%94%B5.%20Total%20a%20pagar:%20$7%20USD" },
-      { id: 3, duration: "30 Días", price: 12, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2030%20Dias%20en%20HG%20CHEATS%20%F0%9F%94%B5.%20Total%20a%20pagar:%20$12%20USD" },
+      { id: 1, duration: "1 Día", price: 3, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%201%20dia%20en%20Drip%20Client%20ROOT%20%F0%9F%94%A5.%20Total%20a%20pagar:%20$3%20USD" },
+      { id: 2, duration: "7 Días", price: 8, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%207%20dias%20en%20Drip%20Client%20ROOT%20%F0%9F%94%A5.%20Total%20a%20pagar:%20$8%20USD" },
+      { id: 3, duration: "30 Días", price: 15, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2030%20dias%20en%20Drip%20Client%20ROOT%20%F0%9F%94%A5.%20Total%20a%20pagar:%20$15%20USD" },
     ],
-    features: ["Magic Bullet", "Speed Hack Safe", "Auto Headshot"],
+    features: ["Requiere Root", "Aimbot Predictivo", "Inyección Directa"],
     rating: 5.0,
-    color: "from-cyan-600 to-blue-500",
-    icon: <img src="https://cdn.phototourl.com/member/2026-03-22-d0720cc9-ac7e-49d7-9f39-05daea467c6d.jpg" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+    color: "from-red-600 to-purple-600",
+    icon: <img src="https://plain-wnam-prod-public.komododecks.com/202604/22/QHoeloQKBdfvvE09u1an/image.jpg" className="w-full h-full object-cover grayscale-[0.2] border-2 border-red-500 rounded-lg" referrerPolicy="no-referrer" />
   },
   {
     id: "cuban",
@@ -354,6 +355,45 @@ const PRODUCTS: Product[] = [
     rating: 5.0,
     color: "from-indigo-500 to-purple-600",
     icon: <img src="https://cdn.phototourl.com/member/2026-03-22-c70c1ffd-fc85-4d42-8b14-f5343865b9ec.png" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+  },
+  {
+    id: "alpha-x-root",
+    name: "Alpha-X Root",
+    description: "Potencia y precisión extrema para dispositivos Root. El cliente más avanzado de la línea Alpha.",
+    mediaUrls: [
+      "https://video.zig.ht/api/videos/file/1776854866933-101291249.mp4",
+      "https://cdn.phototourl.com/free/2026-04-22-99952d0b-1ee8-4379-b052-c8126cebb524.png"
+    ],
+    prices: [
+      { id: 1, duration: "1 Día", price: 2, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%201%20Dia%20en%20Alpha-X%20Root%20%F0%9F%94%A5.%20Total%20a%20pagar:%20$2%20USD" },
+      { id: 2, duration: "7 Días", price: 6, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%207%20Dias%20en%20Alpha-X%20Root%20%F0%9F%94%A5.%20Total%20a%20pagar:%20$6%20USD" },
+      { id: 3, duration: "15 Días", price: 10, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2015%20Dias%20en%20Alpha-X%20Root%20%F0%9F%94%A5.%20Total%20a%20pagar:%20$10%20USD" },
+      { id: 4, duration: "30 Días", price: 14, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2030%20Dias%20en%20Alpha-X%20Root%20%F0%9F%94%A5.%20Total%20a%20pagar:%20$14%20USD" },
+    ],
+    features: ["Aimbot Alpha v2", "Bypass Root Invisible", "ESP 360 Full"],
+    rating: 5.0,
+    color: "from-orange-600 to-red-700",
+    icon: <img src="https://cdn.phototourl.com/free/2026-04-22-99952d0b-1ee8-4379-b052-c8126cebb524.png" className="w-full h-full object-cover border-2 border-orange-500 rounded-lg" referrerPolicy="no-referrer" />
+  },
+  {
+    id: "hg",
+    name: "HG CHEATS",
+    description: "La herramienta definitiva para competitivos. Precisión quirúrgica y velocidad extrema.",
+    mediaUrls: [
+      "https://cdn.phototourl.com/free/2026-03-22-c5cc2a3a-802d-4f73-8851-e91cb13509ca.jpg",
+      "https://cdn.phototourl.com/free/2026-04-20-2be6a425-6f3d-4c66-8273-dddc43f5c3ea.jpg",
+      "https://cdn.phototourl.com/member/2026-03-22-96db9420-7c33-4b78-b946-a212d07bc622.jpg",
+      "https://cdn.phototourl.com/free/2026-04-20-859875e2-dba4-4cd5-9520-83a5eef00024.jpg"
+    ],
+    prices: [
+      { id: 1, duration: "1 Día", price: 2, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%201%20Dia%20en%20HG%20CHEATS%20%F0%9F%94%B5.%20Total%20a%20pagar:%20$2%20USD" },
+      { id: 2, duration: "10 Días", price: 7, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2010%20Dias%20en%20HG%20CHEATS%20%F0%9F%94%B5.%20Total%20a%20pagar:%20$7%20USD" },
+      { id: 3, duration: "30 Días", price: 12, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2030%20Dias%20en%20HG%20CHEATS%20%F0%9F%94%B5.%20Total%20a%20pagar:%20$12%20USD" },
+    ],
+    features: ["Magic Bullet", "Speed Hack Safe", "Auto Headshot"],
+    rating: 5.0,
+    color: "from-cyan-600 to-blue-500",
+    icon: <img src="https://cdn.phototourl.com/member/2026-03-22-d0720cc9-ac7e-49d7-9f39-05daea467c6d.jpg" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
   },
   {
     id: "br-root",
@@ -405,26 +445,6 @@ const PRODUCTS: Product[] = [
     rating: 5.0,
     color: "from-amber-500 to-orange-400",
     icon: <img src="https://cdn.phototourl.com/free/2026-04-06-bb437144-e49b-4f83-a2da-10db1926009f.jpg" className="w-full h-full object-cover border-2 border-amber-500 rounded-lg" referrerPolicy="no-referrer" />
-  },
-  {
-    id: "diamonds-low-price",
-    name: "Diamantes a menos precio",
-    description: "Recarga tus diamantes al mejor precio del mercado. Entrega rápida y segura.",
-    mediaUrls: [
-      "https://cdn.phototourl.com/free/2026-04-06-7eb7ee22-9da8-400b-bcde-11bb98a5c5f3.jpg"
-    ],
-    prices: [
-      { id: 1, duration: "100 💎", price: 0 },
-      { id: 2, duration: "310 💎", price: 0 },
-      { id: 3, duration: "520 💎", price: 0 },
-      { id: 4, duration: "1060 💎", price: 0 },
-      { id: 5, duration: "2180 💎", price: 0 },
-      { id: 6, duration: "5600 💎", price: 0 },
-    ],
-    features: ["Entrega Inmediata", "ID de Jugador", "100% Seguro"],
-    rating: 5.0,
-    color: "from-cyan-400 to-blue-500",
-    icon: <img src="https://cdn.phototourl.com/free/2026-04-06-7eb7ee22-9da8-400b-bcde-11bb98a5c5f3.jpg" className="w-full h-full object-cover border-2 border-cyan-400 rounded-lg" referrerPolicy="no-referrer" />
   }
 ];
 
@@ -575,21 +595,8 @@ const ProductCard = React.memo(({ product, index }: { product: Product; index: n
       {/* Animated Border Glow */}
       <div className={`absolute -inset-[1px] bg-gradient-to-r ${product.color} rounded-[32px] opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-500`} />
       
-      <div className={`relative h-full bg-zinc-950 rounded-[31px] overflow-hidden border border-white/5 shadow-2xl transition-all duration-500 ${
-        product.id === 'diamonds-low-price' ? 'opacity-75 grayscale-[0.3]' : ''
-      }`}>
+      <div className={`relative h-full bg-zinc-950 rounded-[31px] overflow-hidden border border-white/5 shadow-2xl transition-all duration-500`}>
         <div className="relative aspect-[4/3] overflow-hidden bg-zinc-900">
-          {product.id === 'diamonds-low-price' && (
-            <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-[4px]">
-              <motion.div 
-                initial={{ scale: 0.8 }}
-                animate={{ scale: [0.8, 1.1, 1] }}
-                className="bg-red-500 text-white px-8 py-3 rounded-full font-black uppercase tracking-[0.2em] text-xs shadow-[0_0_30px_rgba(239,68,68,0.6)] border border-red-400/50 italic"
-              >
-                En Espera
-              </motion.div>
-            </div>
-          )}
           
           <AnimatePresence mode="wait">
             {isEmbed ? (
@@ -735,20 +742,7 @@ const ProductCard = React.memo(({ product, index }: { product: Product; index: n
             ))}
           </div>
 
-          {product.id === 'diamonds-low-price' ? (
-            <div className="flex gap-3 relative">
-              <div className="flex-1">
-                <button disabled className="w-full h-14 bg-zinc-900 border border-white/5 rounded-2xl text-zinc-600 font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 cursor-not-allowed">
-                  <Clock className="w-4 h-4" />
-                  En Espera
-                </button>
-              </div>
-              <button disabled className="flex-[0.6] bg-zinc-900 border border-white/5 rounded-2xl text-zinc-600 font-black uppercase tracking-widest text-[10px] cursor-not-allowed">
-                Bloqueado
-              </button>
-            </div>
-          ) : (
-            <div className="space-y-4">
+          <div className="space-y-4">
               {['pato-team-no-root', 'pato-team-azul', 'pato-team-verde', 'drip', 'hg', 'cuban'].includes(product.id) && (
                 <motion.a
                   href="https://whatsapp.com/channel/0029Vb858Dy6WaKo7Pie8345"
@@ -816,10 +810,9 @@ const ProductCard = React.memo(({ product, index }: { product: Product; index: n
                 <ChevronRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
               </a>
             </div>
-          )}
+          </div>
         </div>
       </div>
-    </div>
   );
 });
 
