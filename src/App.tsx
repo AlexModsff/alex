@@ -218,6 +218,7 @@ interface Product {
   rating: number;
   color: string;
   icon: ReactNode;
+  objectPosition?: string;
 }
 
 const PRODUCTS: Product[] = [
@@ -354,6 +355,22 @@ const PRODUCTS: Product[] = [
     rating: 4.9,
     color: "from-blue-600 to-indigo-600",
     icon: <img src="https://cdn.phototourl.com/free/2026-03-22-60b7ddc1-4c22-4163-9f82-82242c89014a.png" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+  },
+  {
+    id: "cuban-deluxe",
+    name: "Cuban Deluxe",
+    description: "Próximamente",
+    mediaUrls: [
+      "https://www.image2url.com/r2/default/videos/1776970299259-67cec074-75dc-45e2-9da7-803d214db735.mp4"
+    ],
+    prices: [
+      { id: 1, duration: "Próximamente", price: 0, isAgotado: true }
+    ],
+    features: ["Características Premium", "Máxima Estabilidad", "Soporte Prioritario"],
+    rating: 5.0,
+    color: "from-emerald-400 to-green-600",
+    icon: <img src="https://cdn.phototourl.com/free/2026-03-22-60b7ddc1-4c22-4163-9f82-82242c89014a.png" className="w-full h-full object-cover" referrerPolicy="no-referrer" />,
+    objectPosition: "object-top"
   },
   {
     id: "fluorite",
@@ -661,6 +678,7 @@ const ProductCard = React.memo(({ product, index, isIntroDone }: { product: Prod
                   className="w-full h-full border-0"
                   allow="autoplay; fullscreen"
                   title={product.name}
+                  style={{ objectPosition: product.objectPosition?.replace('object-', '') || 'center' }}
                 />
               </motion.div>
             ) : isVideo ? (
@@ -674,7 +692,7 @@ const ProductCard = React.memo(({ product, index, isIntroDone }: { product: Prod
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                className={`w-full h-full object-cover ${product.objectPosition || ''} transition-transform duration-700 group-hover:scale-110`}
               />
             ) : (
               <motion.img 
@@ -686,7 +704,7 @@ const ProductCard = React.memo(({ product, index, isIntroDone }: { product: Prod
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                className={`w-full h-full object-cover ${product.objectPosition || ''} transition-transform duration-700 group-hover:scale-110`}
                 referrerPolicy="no-referrer"
               />
             )}
