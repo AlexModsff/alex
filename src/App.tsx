@@ -10,6 +10,7 @@ import { BrowserRouter as Router, Routes, Route, Link, useNavigate, useLocation,
 import { auth, db } from "./firebase";
 import { onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updateProfile, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
+import IntroAnimation from "./components/IntroAnimation";
 
 // Auth Context
 interface AuthContextType {
@@ -220,18 +221,18 @@ interface Product {
 const PRODUCTS: Product[] = [
   {
     id: "pato-team-no-root",
-    name: "Pato Team (No Root)",
-    description: "Versión especializada para dispositivos No Root. Máxima seguridad sin necesidad de acceso superusuario.",
+    name: "Pato Team Orange",
+    description: "Versión especializada Orange. Máxima seguridad y rendimiento superior en cada partida.",
     mediaUrls: [
       "https://plain-wnam-prod-public.komododecks.com/202604/21/K8yv25jmdxnNPca4Yyuv/image.png",
-      "https://img.sanishtech.com/u/291edbfaa990ae61320bc46d4158f691.jpeg",
+      "https://cdn.phototourl.com/free/2026-04-23-cb335971-7658-40c5-8a63-1898d536a2ef.jpg",
       "https://img.sanishtech.com/u/e2398b3860ee627e58bfe45cb17d1daa.jpeg",
       "https://img.sanishtech.com/u/97a7f29500d3c488a190a808df523a5b.jpeg"
     ],
     prices: [
-      { id: 1, duration: "30 Días", price: 15, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2030%20dias%20en%20Pato%20Team%20No%20Root%20%F0%9F%9F%A1.%20Total%20a%20pagar:%20$15%20USD" },
+      { id: 1, duration: "30 Días", price: 15, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2030%20dias%20en%20Pato%20Team%20Orange%20%F0%9F%A7%A1.%20Total%20a%20pagar:%20$15%20USD" },
     ],
-    features: ["Optimizado No Root", "Instalación Sencilla", "Ant-Ban de Élite"],
+    features: ["Optimización Orange", "Instalación Sencilla", "Ant-Ban de Élite"],
     rating: 5.0,
     color: "from-yellow-400 to-amber-500",
     icon: <img src="https://img.sanishtech.com/u/89aa8172a8f9a19c0db93ab16f1150cc.jpeg" className="w-full h-full object-cover border-2 border-yellow-400 rounded-lg" referrerPolicy="no-referrer" />
@@ -261,7 +262,7 @@ const PRODUCTS: Product[] = [
     description: "La versión optimizada para máxima fluidez y rendimiento. Domina con el poder del verde.",
     mediaUrls: [
       "https://cdn.phototourl.com/free/2026-04-06-738f499d-d1c2-4bd4-bd76-750092c9eb7d.png",
-      "https://video.zig.ht/api/videos/file/1776709798036-29782260.mp4",
+      "https://www.image2url.com/r2/default/videos/1776953660584-b557ff3e-6e85-44c3-b21e-a011768cfdc7.mp4",
       "https://cdn.phototourl.com/free/2026-04-06-39004ccb-4017-4ab3-949f-c4262944bf59.jpg"
     ],
     prices: [
@@ -280,11 +281,9 @@ const PRODUCTS: Product[] = [
     description: "Optimizado para dispositivos sin root. Máxima seguridad y fluidez en cada partida.",
     mediaUrls: [
       "https://cdn.phototourl.com/free/2026-03-22-76ea78a1-3c72-4e78-bd4e-76b81dd7683b.jpg",
-      "https://video.zig.ht/api/videos/file/1776709359530-839824951.mp4",
+      "https://www.image2url.com/r2/default/videos/1776953861349-f4a441bf-70ae-42db-9353-7f129fb5d2ab.mp4",
       "https://cdn.phototourl.com/member/2026-03-22-d125fab5-a77c-40d9-b4d5-3565853aadaa.webp",
-      "https://cdn.phototourl.com/free/2026-04-20-d0caaedc-6a07-4ffb-ac26-39a48b66fcd4.jpg",
-      "https://cdn.phototourl.com/free/2026-04-20-d0ec8922-75d5-4c0a-a80b-bd5b86e14820.jpg",
-      "https://cdn.phototourl.com/free/2026-04-20-eb336bf5-c7ea-4a89-9bcb-dcd651379508.jpg"
+      "https://cdn.phototourl.com/free/2026-04-20-d0caaedc-6a07-4ffb-ac26-39a48b66fcd4.jpg"
     ],
     prices: [
       { id: 1, duration: "1 Día", price: 3, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%201%20dia%20en%20Drip%20Client%20%F0%9F%9F%A3.%20Total%20a%20pagar:%20$3%20USD" },
@@ -302,10 +301,9 @@ const PRODUCTS: Product[] = [
     description: "Versión definitiva para dispositivos con acceso root. Máximo control y precisión absoluta en el campo de batalla.",
     mediaUrls: [
       "https://plain-wnam-prod-public.komododecks.com/202604/22/QHoeloQKBdfvvE09u1an/image.jpg",
+      "https://www.image2url.com/r2/default/videos/1776953861349-f4a441bf-70ae-42db-9353-7f129fb5d2ab.mp4",
       "https://cdn.phototourl.com/member/2026-03-22-d125fab5-a77c-40d9-b4d5-3565853aadaa.webp",
-      "https://cdn.phototourl.com/free/2026-04-20-d0caaedc-6a07-4ffb-ac26-39a48b66fcd4.jpg",
-      "https://video.zig.ht/api/videos/file/1776709359530-839824951.mp4",
-      "https://cdn.phototourl.com/free/2026-04-20-d0ec8922-75d5-4c0a-a80b-bd5b86e14820.jpg"
+      "https://cdn.phototourl.com/free/2026-04-20-d0caaedc-6a07-4ffb-ac26-39a48b66fcd4.jpg"
     ],
     prices: [
       { id: 1, duration: "1 Día", price: 3, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%201%20dia%20en%20Drip%20Client%20ROOT%20%F0%9F%94%A5.%20Total%20a%20pagar:%20$3%20USD" },
@@ -400,6 +398,7 @@ const PRODUCTS: Product[] = [
     name: "BR MODS ROOT",
     description: "Diseñado específicamente para dispositivos con acceso root. Control total, Aimbot avanzado y seguridad para tu cuenta principal.",
     mediaUrls: [
+      "https://www.image2url.com/r2/default/videos/1776954218618-f52d6aee-fcb4-4f8a-b338-baefdca27203.mp4",
       "https://cdn.phototourl.com/member/2026-03-22-2d0942d8-dd8f-48a0-8c91-0368ec3346f8.png",
       "https://cdn.phototourl.com/member/2026-03-22-1a1d3664-575a-4a45-9983-d0bb2891ebf4.png"
     ],
@@ -554,8 +553,8 @@ const ProductCard = React.memo(({ product, index }: { product: Product; index: n
     e.stopPropagation();
     
     const shareData = {
-      title: `Alex FF Mods - ${product.name}`,
-      text: `Mira este producto en Alex FF Mods: ${product.name}`,
+      title: `Alex FF Store - ${product.name}`,
+      text: `Mira este producto en Alex FF Store: ${product.name}`,
       url: window.location.href.split('#')[0] + '#' + product.id
     };
 
@@ -1110,7 +1109,7 @@ function Inicio() {
                 transition={{ duration: 0.8 }}
                 className="inline-block pr-[0.2em] bg-clip-text text-transparent bg-gradient-to-r from-zinc-300 via-white via-zinc-100 via-sky-200 to-zinc-400 drop-shadow-[0_0_70px_rgba(255,255,255,0.5)]"
               >
-                ALEX MODS
+                ALEX STORE
               </motion.span>
             </h1>
             
@@ -1594,6 +1593,19 @@ function AppContent() {
   const { user, rawUsername, saldo, esCliente, logout, isInitialCheck } = useAuth();
   const [recentPurchase, setRecentPurchase] = useState<{ user: string; item: string } | null>(null);
   const [welcomeToast, setWelcomeToast] = useState<string | null>(null);
+  const [showIntro, setShowIntro] = useState(true);
+  const location = useLocation();
+
+  // Trigger intro when navigating to /productos
+  useEffect(() => {
+    if (location.pathname === "/productos" && !showIntro) {
+      setShowIntro(true);
+    }
+  }, [location.pathname]);
+
+  const handleIntroComplete = () => {
+    setShowIntro(false);
+  };
 
   useEffect(() => {
     if (user) {
@@ -1669,16 +1681,23 @@ function AppContent() {
   }
 
   return (
-    <Router>
-      <ScrollToTop />
-      <div className="min-h-screen bg-black font-sans text-white selection:bg-white selection:text-black">
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Inicio />} />
-          <Route path="/productos" element={<ProtectedRoute><Productos /></ProtectedRoute>} />
-          <Route path="/redes" element={<ProtectedRoute><Redes /></ProtectedRoute>} />
-          <Route path="/auth" element={<AuthPage />} />
-        </Routes>
+    <>
+      <AnimatePresence mode="wait">
+        {showIntro && (
+          <IntroAnimation onComplete={handleIntroComplete} />
+        )}
+      </AnimatePresence>
+      
+      <div className={showIntro ? "hidden" : "block"}>
+        <ScrollToTop />
+        <div className="min-h-screen bg-black font-sans text-white selection:bg-white selection:text-black">
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Inicio />} />
+            <Route path="/productos" element={<ProtectedRoute><Productos /></ProtectedRoute>} />
+            <Route path="/redes" element={<ProtectedRoute><Redes /></ProtectedRoute>} />
+            <Route path="/auth" element={<AuthPage />} />
+          </Routes>
 
         <AnimatePresence>
           {welcomeToast && (
@@ -1817,14 +1836,17 @@ function AppContent() {
           </div>
         </footer>
       </div>
-    </Router>
+    </div>
+    </>
   );
 }
 
 export default function App() {
   return (
-    <AuthProvider>
-      <AppContent />
-    </AuthProvider>
+    <Router>
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
+    </Router>
   );
 }
