@@ -7,12 +7,12 @@ const IntroAnimation = ({ onComplete }: { onComplete: () => void }) => {
   const subtext = "Tu mejor opción";
 
   useEffect(() => {
-    // Subtext starts at 2.5s + 1.2s duration = 3.7s. 
-    // Reduced stay time to 0.3s after animation finishes = 4.0s total.
+    // Subtext finishes at 2.5s (start) + 1.2s (duration) = 3.7s. 
+    // Stay visible for exactly 1 second after = 4.7s total.
     const timer = setTimeout(() => {
       setIsVisible(false);
-      setTimeout(onComplete, 500); // Quick fade out
-    }, 4000);
+      setTimeout(onComplete, 400); // Quick transition to page
+    }, 4700);
 
     return () => clearTimeout(timer);
   }, [onComplete]);
@@ -24,7 +24,7 @@ const IntroAnimation = ({ onComplete }: { onComplete: () => void }) => {
           id="intro-screen"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.8, ease: "easeInOut" }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
           className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black overflow-hidden"
         >
           {/* 1. Top Cinematic Line - Slower expansion */}

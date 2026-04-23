@@ -181,11 +181,13 @@ const useAuth = () => {
 };
 
 function ScrollToTop() {
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
 
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
+    if (!hash) {
+      window.scrollTo(0, 0);
+    }
+  }, [pathname, hash]);
 
   return null;
 }
@@ -254,7 +256,7 @@ const PRODUCTS: Product[] = [
     features: ["Aimbot Avanzado", "ESP Customizable", "Seguridad Reforzada"],
     rating: 5.0,
     color: "from-blue-500 to-cyan-400",
-    icon: <img src="https://cdn.phototourl.com/free/2026-04-06-ee00520b-7ff7-486e-9ad3-996fb2b8f41a.jpg" className="w-full h-full object-cover border-2 border-blue-500 rounded-lg" referrerPolicy="no-referrer" />
+    icon: <img src="https://gcdnb.pbrd.co/images/J2UYl7p-x69c.jpg" className="w-full h-full object-cover border-2 border-blue-500 rounded-lg" referrerPolicy="no-referrer" />
   },
   {
     id: "pato-team-verde",
@@ -273,7 +275,7 @@ const PRODUCTS: Product[] = [
     features: ["Optimización Verde", "ESP Ultra-Rápido", "Bypass Indetectable"],
     rating: 5.0,
     color: "from-emerald-500 to-green-400",
-    icon: <img src="https://cdn.phototourl.com/free/2026-04-06-738f499d-d1c2-4bd4-bd76-750092c9eb7d.png" className="w-full h-full object-cover border-2 border-emerald-500 rounded-lg" referrerPolicy="no-referrer" />
+    icon: <img src="https://gcdnb.pbrd.co/images/HZ1Zwaf4dNS3.jpg" className="w-full h-full object-cover border-2 border-emerald-500 rounded-lg" referrerPolicy="no-referrer" />
   },
   {
     id: "drip",
@@ -281,7 +283,7 @@ const PRODUCTS: Product[] = [
     description: "Optimizado para dispositivos sin root. Máxima seguridad y fluidez en cada partida.",
     mediaUrls: [
       "https://cdn.phototourl.com/free/2026-03-22-76ea78a1-3c72-4e78-bd4e-76b81dd7683b.jpg",
-      "https://www.image2url.com/r2/default/videos/1776953861349-f4a441bf-70ae-42db-9353-7f129fb5d2ab.mp4",
+      "https://www.image2url.com/r2/default/videos/1776957535592-7c97be62-2c05-48f7-9dd8-c1c8e5346019.mp4",
       "https://cdn.phototourl.com/member/2026-03-22-d125fab5-a77c-40d9-b4d5-3565853aadaa.webp",
       "https://cdn.phototourl.com/free/2026-04-20-d0caaedc-6a07-4ffb-ac26-39a48b66fcd4.jpg"
     ],
@@ -313,7 +315,26 @@ const PRODUCTS: Product[] = [
     features: ["Requiere Root", "Aimbot Predictivo", "Inyección Directa"],
     rating: 5.0,
     color: "from-red-600 to-purple-600",
-    icon: <img src="https://plain-wnam-prod-public.komododecks.com/202604/22/QHoeloQKBdfvvE09u1an/image.jpg" className="w-full h-full object-cover grayscale-[0.2] border-2 border-red-500 rounded-lg" referrerPolicy="no-referrer" />
+    icon: <img src="https://cdn.phototourl.com/free/2026-03-22-5f523836-ad3a-420b-8ed6-f0e8c533b06f.png" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+  },
+  {
+    id: "drip-pc",
+    name: "Drip Client PC",
+    description: "La versión definitiva de Drip Client optimizada para PC. Máximo rendimiento, precisión absoluta y seguridad de primer nivel para dominar en escritorio.",
+    mediaUrls: [
+      "https://gcdnb.pbrd.co/images/YHyf-gvUU2ka.jpg"
+    ],
+    prices: [
+      { id: 1, duration: "1 Día", price: 3, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%201%20dia%20en%20Drip%20Client%20PC%20%F0%9F%92%BB.%20Total%20a%20pagar:%20$3%20USD" },
+      { id: 2, duration: "5 Días", price: 6, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%205%20dias%20en%20Drip%20Client%20PC%20%F0%9F%92%BB.%20Total%20a%20pagar:%20$6%20USD" },
+      { id: 3, duration: "7 Días", price: 8, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%207%20dias%20en%20Drip%20Client%20PC%20%F0%9F%92%BB.%20Total%20a%20pagar:%20$8%20USD" },
+      { id: 4, duration: "15 Días", price: 14, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2015%20dias%20en%20Drip%20Client%20PC%20%F0%9F%92%BB.%20Total%20a%20pagar:%20$14%20USD" },
+      { id: 5, duration: "30 Días", price: 19, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2030%20dias%20en%20Drip%20Client%20PC%20%F0%9F%92%BB.%20Total%20a%20pagar:%20$19%20USD" },
+    ],
+    features: ["Optimizado para PC", "Aimbot de Alta Precisión", "Bypass de Seguridad Avanzado"],
+    rating: 5.0,
+    color: "from-indigo-600 to-blue-500",
+    icon: <img src="https://cdn.phototourl.com/free/2026-03-22-5f523836-ad3a-420b-8ed6-f0e8c533b06f.png" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
   },
   {
     id: "cuban",
@@ -541,12 +562,29 @@ function Sparkles() {
 }
 
 // Memoized ProductCard for performance
-const ProductCard = React.memo(({ product, index }: { product: Product; index: number; key?: string }) => {
+const ProductCard = React.memo(({ product, index, isIntroDone }: { product: Product; index: number; isIntroDone: boolean; key?: string }) => {
   const [selectedPriceId, setSelectedPriceId] = useState(
     product.prices.find(p => !p.isAgotado)?.id || product.prices[0].id
   );
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [copied, setCopied] = useState(false);
+  const [isHighlighted, setIsHighlighted] = useState(false);
+  const location = useLocation();
+
+  // Scroll to and highlight product if hash matches ID and intro is done
+  useEffect(() => {
+    if (isIntroDone && location.hash === `#${product.id}`) {
+      const timer = setTimeout(() => {
+        const element = document.getElementById(product.id);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          setIsHighlighted(true);
+          setTimeout(() => setIsHighlighted(false), 3000);
+        }
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [location.hash, product.id, isIntroDone]);
 
   const handleShare = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -594,7 +632,19 @@ const ProductCard = React.memo(({ product, index }: { product: Product; index: n
       {/* Animated Border Glow */}
       <div className={`absolute -inset-[1px] bg-gradient-to-r ${product.color} rounded-[32px] opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-500`} />
       
-      <div className={`relative h-full bg-zinc-950 rounded-[31px] overflow-hidden border border-white/5 shadow-2xl transition-all duration-500`}>
+      {/* Active Highlight Border (blinking) */}
+      <AnimatePresence>
+        {isHighlighted && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: [0, 1, 0] }}
+            transition={{ duration: 0.5, repeat: 6 }} // 3 seconds total (0.5s * 6)
+            className={`absolute -inset-[3px] bg-gradient-to-r ${product.color} rounded-[33px] blur-md z-0 shadow-[0_0_20px_rgba(255,255,255,0.3)]`}
+          />
+        )}
+      </AnimatePresence>
+      
+      <div className={`relative h-full bg-zinc-950 rounded-[31px] overflow-hidden border ${isHighlighted ? 'border-white/40' : 'border-white/5'} shadow-2xl transition-all duration-500`}>
         <div className="relative aspect-[4/3] overflow-hidden bg-zinc-900">
           
           <AnimatePresence mode="wait">
@@ -1303,7 +1353,7 @@ function Inicio() {
   );
 }
 
-function Productos() {
+function Productos({ showIntro }: { showIntro: boolean }) {
   return (
     <div className="relative min-h-screen bg-black overflow-hidden">
       {/* Immersive Background Elements */}
@@ -1332,7 +1382,7 @@ function Productos() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mb-32">
           {PRODUCTS.map((product, index) => (
-            <ProductCard key={product.id} product={product} index={index} />
+            <ProductCard key={product.id} product={product} index={index} isIntroDone={!showIntro} />
           ))}
         </div>
 
@@ -1694,7 +1744,7 @@ function AppContent() {
           <Navbar />
           <Routes>
             <Route path="/" element={<Inicio />} />
-            <Route path="/productos" element={<ProtectedRoute><Productos /></ProtectedRoute>} />
+            <Route path="/productos" element={<ProtectedRoute><Productos showIntro={showIntro} /></ProtectedRoute>} />
             <Route path="/redes" element={<ProtectedRoute><Redes /></ProtectedRoute>} />
             <Route path="/auth" element={<AuthPage />} />
           </Routes>
