@@ -6,13 +6,22 @@ const IntroAnimation = ({ onComplete }: { onComplete: () => void }) => {
   const title = "ALEX STORE";
   const subtext = "Tu mejor opción";
 
+  const audioRef = React.useRef<HTMLAudioElement | null>(null);
+  const audioStarted = React.useRef(false);
+
   useEffect(() => {
+    if (!audioRef.current) {
+      audioRef.current = new Audio("https://www.image2url.com/r2/default/audio/1777016222490-e4a918e6-6977-4fed-905d-4407b84a0f24.mp3");
+    }
+    
     // Play intro sound - synced with text appearance (1s delay)
-    const audio = new Audio("https://www.image2url.com/r2/default/audio/1777016222490-e4a918e6-6977-4fed-905d-4407b84a0f24.mp3");
     const audioTimer = setTimeout(() => {
-      audio.play().catch(error => {
-        console.warn("Audio autoplay blocked or failed:", error);
-      });
+      if (audioRef.current && !audioStarted.current) {
+        audioStarted.current = true;
+        audioRef.current.play().catch(error => {
+          console.warn("Audio autoplay blocked or failed:", error);
+        });
+      }
     }, 1000);
 
     // Subtext finishes at 2.5s (start) + 1.2s (duration) = 3.7s. 
@@ -25,8 +34,10 @@ const IntroAnimation = ({ onComplete }: { onComplete: () => void }) => {
     return () => {
       clearTimeout(timer);
       clearTimeout(audioTimer);
-      audio.pause();
-      audio.currentTime = 0;
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
     };
   }, [onComplete]);
 

@@ -340,7 +340,7 @@ const PRODUCTS: Product[] = [
     name: "Cuban Mods",
     description: "El panel más completo y estable para Free Fire. Incluye Aimbot Pro, ESP Line y Antena.",
     mediaUrls: [
-      "https://videotourl.com/videos/1774197053145-3af3060a-762d-4de9-aab1-622c8711c8c3.mp4",
+      "https://streamable.com/azsskt",
       "https://cdn.phototourl.com/free/2026-03-22-377e4dc7-0d9c-4830-ae84-65d069746d42.jpg",
       "https://cdn.phototourl.com/free/2026-04-20-06aa664d-edef-46d7-9534-149b8568ed70.jpg"
     ],
@@ -376,7 +376,7 @@ const PRODUCTS: Product[] = [
     description: "Para cuenta principal, usuarios con iPhone, seguro.",
     mediaUrls: [
       "https://videotourl.com/videos/1774195663595-62429af7-55ed-4b3c-966a-1233b381cfdf.mp4",
-      "https://video.zig.ht/api/videos/file/1776710194447-12363127.mp4",
+      "https://i.ibb.co/SwW3XFSV/photo-2026-04-24-14-49-48.jpg",
       "https://cdn.phototourl.com/member/2026-03-22-6472f28b-2a7c-4451-b00c-421ac27032cc.jpg",
       "https://cdn.phototourl.com/member/2026-04-20-6a07aefe-257f-4969-8acc-2fcfed9ba837.jpg"
     ],
@@ -576,6 +576,13 @@ function Sparkles() {
   );
 }
 
+// Add purchase sound helper
+const playPurchaseSound = () => {
+  const audio = new Audio("https://www.image2url.com/r2/default/audio/1777051374523-61428ee0-1f9e-4772-81a3-c1074694f840.mp3");
+  audio.volume = 0.5;
+  audio.play().catch(error => console.warn("Audio play failed:", error));
+};
+
 // Memoized ProductCard for performance
 const ProductCard = React.memo(({ product, index, isIntroDone }: { product: Product; index: number; isIntroDone: boolean; key?: string }) => {
   const [selectedPriceId, setSelectedPriceId] = useState(
@@ -585,6 +592,11 @@ const ProductCard = React.memo(({ product, index, isIntroDone }: { product: Prod
   const [copied, setCopied] = useState(false);
   const [isHighlighted, setIsHighlighted] = useState(false);
   const location = useLocation();
+
+  const handlePriceSelect = (id: number) => {
+    setSelectedPriceId(id);
+    playPurchaseSound();
+  };
 
   // Scroll to and highlight product if hash matches ID and intro is done
   useEffect(() => {
@@ -640,7 +652,7 @@ const ProductCard = React.memo(({ product, index, isIntroDone }: { product: Prod
 
   const currentMediaUrl = product.mediaUrls[currentImageIndex];
   const isVideo = useMemo(() => currentMediaUrl?.endsWith('.mp4') || currentMediaUrl?.endsWith('.webm'), [currentMediaUrl]);
-  const isEmbed = useMemo(() => currentMediaUrl?.includes('screenapp.io') || currentMediaUrl?.includes('youtube.com'), [currentMediaUrl]);
+  const isEmbed = useMemo(() => currentMediaUrl?.includes('screenapp.io') || currentMediaUrl?.includes('youtube.com') || currentMediaUrl?.includes('streamable.com'), [currentMediaUrl]);
 
   return (
     <div className="group relative will-change-transform" id={product.id}>
@@ -672,7 +684,13 @@ const ProductCard = React.memo(({ product, index, isIntroDone }: { product: Prod
                 className="w-full h-full"
               >
                 <iframe
-                  src={currentMediaUrl.includes('screenapp.io') ? currentMediaUrl.replace('/app/v/', '/embed/') : currentMediaUrl}
+                  src={
+                    currentMediaUrl.includes('screenapp.io') 
+                      ? currentMediaUrl.replace('/app/v/', '/embed/') 
+                      : currentMediaUrl.includes('streamable.com')
+                        ? `${currentMediaUrl.replace('.com/', '.com/e/')}?autoplay=1`
+                        : currentMediaUrl
+                  }
                   className="w-full h-full border-0"
                   allow="autoplay; fullscreen"
                   title={product.name}
@@ -834,7 +852,7 @@ const ProductCard = React.memo(({ product, index, isIntroDone }: { product: Prod
                     return (
                       <button
                         key={price.id}
-                        onClick={() => setSelectedPriceId(price.id)}
+                        onClick={() => handlePriceSelect(price.id)}
                         className={`relative py-3 px-2 rounded-xl border transition-all duration-300 flex flex-col items-center justify-center text-center ${
                           isAgotado
                             ? isSelected
@@ -860,6 +878,7 @@ const ProductCard = React.memo(({ product, index, isIntroDone }: { product: Prod
                 target={product.prices.find(p => p.id === selectedPriceId)?.isAgotado ? "_self" : "_blank"}
                 rel="noopener noreferrer"
                 onClick={(e) => {
+                  playPurchaseSound();
                   if (product.prices.find(p => p.id === selectedPriceId)?.isAgotado) {
                     e.preventDefault();
                   }
@@ -1251,7 +1270,10 @@ function Inicio() {
               )}
 
               <motion.button 
-                onClick={() => window.open('https://wa.me/527122937666?text=Hola,%20vi%20tu%20tienda%20y%20quiero%20que%20me%20crees%20una%20personalizada%20igual%20a%20la%20tuya%20mi%20presupuesto%20es%20de%20$:%20', '_blank')}
+                onClick={() => {
+                  playPurchaseSound();
+                  window.open('https://wa.me/527122937666?text=Hola,%20vi%20tu%20tienda%20y%20quiero%20que%20me%20crees%20una%20personalizada%20igual%20a%20la%20tuya%20mi%20presupuesto%20es%20de%20$:%20', '_blank');
+                }}
                 whileHover={{ scale: 1.05, boxShadow: "0 0 40px rgba(52,211,153,0.4)" }}
                 whileTap={{ scale: 0.95 }}
                 className="group relative w-full sm:w-64 h-16 overflow-hidden rounded-2xl transition-all border border-emerald-500/30 backdrop-blur-3xl shadow-[0_0_20px_rgba(52,211,153,0.05)]"
@@ -1669,9 +1691,9 @@ function AppContent() {
     }
   }, [location.pathname]);
 
-  const handleIntroComplete = () => {
+  const handleIntroComplete = useCallback(() => {
     setShowIntro(false);
-  };
+  }, []);
 
   useEffect(() => {
     if (user) {
