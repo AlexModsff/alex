@@ -7,6 +7,14 @@ const IntroAnimation = ({ onComplete }: { onComplete: () => void }) => {
   const subtext = "Tu mejor opción";
 
   useEffect(() => {
+    // Play intro sound - synced with text appearance (1s delay)
+    const audio = new Audio("https://www.image2url.com/r2/default/audio/1777016222490-e4a918e6-6977-4fed-905d-4407b84a0f24.mp3");
+    const audioTimer = setTimeout(() => {
+      audio.play().catch(error => {
+        console.warn("Audio autoplay blocked or failed:", error);
+      });
+    }, 1000);
+
     // Subtext finishes at 2.5s (start) + 1.2s (duration) = 3.7s. 
     // Stay visible for exactly 1 second after = 4.7s total.
     const timer = setTimeout(() => {
@@ -14,7 +22,12 @@ const IntroAnimation = ({ onComplete }: { onComplete: () => void }) => {
       setTimeout(onComplete, 400); // Quick transition to page
     }, 4700);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(audioTimer);
+      audio.pause();
+      audio.currentTime = 0;
+    };
   }, [onComplete]);
 
   return (

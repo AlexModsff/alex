@@ -228,9 +228,7 @@ const PRODUCTS: Product[] = [
     description: "Versión especializada Orange. Máxima seguridad y rendimiento superior en cada partida.",
     mediaUrls: [
       "https://plain-wnam-prod-public.komododecks.com/202604/21/K8yv25jmdxnNPca4Yyuv/image.png",
-      "https://cdn.phototourl.com/free/2026-04-23-cb335971-7658-40c5-8a63-1898d536a2ef.jpg",
-      "https://img.sanishtech.com/u/e2398b3860ee627e58bfe45cb17d1daa.jpeg",
-      "https://img.sanishtech.com/u/97a7f29500d3c488a190a808df523a5b.jpeg"
+      "https://cdn.phototourl.com/free/2026-04-23-cb335971-7658-40c5-8a63-1898d536a2ef.jpg"
     ],
     prices: [
       { id: 1, duration: "30 Días", price: 15, purchaseUrl: "https://wa.me/527122937666?text=Quiero%20adquirir%20Key%20de%2030%20dias%20en%20Pato%20Team%20Orange%20%F0%9F%A7%A1.%20Total%20a%20pagar:%20$15%20USD" },
