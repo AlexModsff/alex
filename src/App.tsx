@@ -395,6 +395,7 @@ const PRODUCTS: Product[] = [
     name: "Alpha-X Root",
     description: "Potencia y precisión extrema para dispositivos Root. El cliente más avanzado de la línea Alpha.",
     mediaUrls: [
+      "https://screenapp.io/app/v/XwngPsRLUs",
       "https://video.zig.ht/api/videos/file/1776854866933-101291249.mp4",
       "https://cdn.phototourl.com/free/2026-04-22-99952d0b-1ee8-4379-b052-c8126cebb524.png"
     ],
@@ -796,6 +797,14 @@ const ProductCard = React.memo(({ product, index, isIntroDone }: { product: Prod
           {/* Product Icon Floating */}
           <div className="absolute bottom-6 left-6 z-20">
             <motion.div 
+              animate={{ 
+                rotateY: [0, 360] 
+              }}
+              transition={{ 
+                duration: 8, 
+                repeat: Infinity, 
+                ease: "linear" 
+              }}
               whileHover={{ scale: 1.1, rotate: 5 }}
               className={`w-14 h-14 rounded-2xl overflow-hidden shadow-2xl border border-white/20 bg-gradient-to-br ${product.color} p-[1px]`}
             >
